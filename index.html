@@ -486,9 +486,126 @@
             font-size: 16px;
         }
         
-        /* Scroll suave */
-        html {
-            scroll-behavior: smooth;
+        /* Modal para imágenes */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { 
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            to { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-width: 500px;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .modal-title {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: linear-gradient(45deg, #ff0066, #cc0044);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 102, 0.3);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .close-btn:hover, .close-btn:focus {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 0, 102, 0.5);
+            outline: none;
+        }
+        
+        .exercise-name-clickable {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: underline;
+            text-decoration-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .exercise-name-clickable:hover {
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            text-decoration-color: #00ff00;
+        }
+        
+        @media (max-width: 480px) {
+            .modal-content {
+                max-width: 95%;
+                max-height: 95%;
+                padding: 15px;
+            }
+            
+            .modal-image {
+                max-height: 300px;
+            }
+            
+            .modal-title {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -546,15 +663,49 @@
                 <p>¡Has completado tu rutina HIIT como un verdadero Spider-Man!</p>
             </div>
         </div>
+        
+        <!-- Modal para mostrar imágenes de ejercicios -->
+        <div id="exerciseModal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal()">×</button>
+                <h3 id="modalTitle" class="modal-title"></h3>
+                <img id="modalImage" class="modal-image" src="" alt="">
+            </div>
+        </div>
     </div>
     
     <script>
         const exercises = [
-            { name: 'Dominadas', emoji: '🦾', id: 'pullups' },
-            { name: 'Fondos', emoji: '💪', id: 'dips' },
-            { name: 'Flexiones', emoji: '🤲', id: 'pushups' },
-            { name: 'Abdominales', emoji: '🔥', id: 'crunches' },
-            { name: 'Sentadillas', emoji: '🦵', id: 'squats' }
+            { 
+                name: 'Paso del oso', 
+                emoji: '🐻', 
+                id: 'bearcrawl',
+                image: 'https://www.wikihow.com/images_en/thumb/3/34/Do-Bear-Crawls-Step-10.jpg/v4-460px-Do-Bear-Crawls-Step-10.jpg'
+            },
+            { 
+                name: 'Plancha con toque de hombros', 
+                emoji: '🤲', 
+                id: 'shouldertaps',
+                image: 'https://thumbs.dreamstime.com/b/tabl%C3%B3n-hombro-grifos-mujer-ejercicio-en-casa-gu%C3%ADa-hembra-haciendo-toques-de-desde-la-tabla-esquema-concepto-chica-trabajando-su-218680936.jpg'
+            },
+            { 
+                name: 'Thruster con mancuernas', 
+                emoji: '🏋️', 
+                id: 'thrusters',
+                image: 'https://www.zonawod.com/wp-content/uploads/dumbbell-thrusters-con-mancuernas.jpeg'
+            },
+            { 
+                name: 'Renegade Row', 
+                emoji: '💪', 
+                id: 'renegaderow',
+                image: 'https://static.strengthlevel.com/images/exercises/renegade-row/renegade-row-800.jpg'
+            },
+            { 
+                name: 'Flexiones', 
+                emoji: '🔥', 
+                id: 'pushups',
+                image: 'https://media.istockphoto.com/id/882882258/es/vector/el-joven-afroamericana-activos-est%C3%A1-haciendo-la-empuja-hacia-arriba-el-ejercicio.jpg?s=612x612&w=0&k=20&c=oeVJw6tTg2Q54puyY1wBof74k-nDLR92WgKZfy2_ds0='
+            }
         ];
         
         let currentRound = 1;
@@ -586,7 +737,7 @@
                 row.innerHTML = `
                     <td>
                         <span class="exercise-emoji">${exercise.emoji}</span>
-                        <span class="exercise-name">${exercise.name}</span>
+                        <span class="exercise-name exercise-name-clickable" onclick="openModal('${exercise.id}', '${exercise.name}', '${exercise.image}')">${exercise.name}</span>
                     </td>
                     <td class="reps-display">${currentReps}</td>
                     <td>
@@ -599,6 +750,43 @@
                 tbody.appendChild(row);
             });
         }
+        
+        function openModal(exerciseId, exerciseName, imageUrl) {
+            const modal = document.getElementById('exerciseModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalImage = document.getElementById('modalImage');
+            
+            modalTitle.textContent = exerciseName;
+            modalImage.src = imageUrl;
+            modalImage.alt = exerciseName;
+            modal.style.display = 'block';
+            
+            // Prevenir scroll del body cuando el modal está abierto
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('exerciseModal');
+            modal.style.display = 'none';
+            
+            // Restaurar scroll del body
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Cerrar modal al hacer clic fuera de la imagen
+        window.onclick = function(event) {
+            const modal = document.getElementById('exerciseModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
         
         function toggleExercise(exerciseId) {
             if (!completedExercises[currentRound]) {
