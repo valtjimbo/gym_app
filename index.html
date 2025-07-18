@@ -1,885 +1,857 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Spider-Man HIIT Tracker</title>
-            <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            min-height: 100vh;
-            color: #ffffff;
-            position: relative;
-            overflow-x: hidden;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-        }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(255, 0, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 100, 255, 0.1) 0%, transparent 50%),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            z-index: -1;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-            padding: 20px 0;
-        }
-        
-        .header::before {
-            content: '🕷️';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2rem;
-            animation: swing 2s ease-in-out infinite;
-        }
-        
-        @keyframes swing {
-            0%, 100% { transform: translateX(-50%) rotate(0deg); }
-            50% { transform: translateX(-50%) rotate(10deg); }
-        }
-        
-        h1 {
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, #ff0000, #0066ff, #ff0000);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: spideyGlow 3s ease-in-out infinite;
-            margin-top: 30px;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            line-height: 1.2;
-        }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-        }
-        
-        @keyframes spideyGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .subtitle {
-            font-size: 0.9rem;
-            color: #cccccc;
-            margin-top: 10px;
-            letter-spacing: 1px;
-        }
-        
-        @media (max-width: 480px) {
-            .subtitle {
-                font-size: 0.8rem;
-                letter-spacing: 0.5px;
-            }
-        }
-        
-        .progress-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        
-        @media (max-width: 480px) {
-            .progress-section {
-                padding: 15px;
-                border-radius: 10px;
-            }
-        }
-        
-        .round-selector {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 480px) {
-            .round-selector {
-                gap: 10px;
-                margin-bottom: 20px;
-            }
-        }
-        
-        .round-btn {
-            background: linear-gradient(45deg, #ff0000, #cc0000);
-            border: none;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-        
-        @media (max-width: 480px) {
-            .round-btn {
-                padding: 12px 20px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        .round-btn:hover, .round-btn:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
-            outline: none;
-        }
-        
-        .round-btn:active {
-            transform: translateY(0);
-        }
-        
-        .round-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .current-round {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-            text-align: center;
-        }
-        
-        @media (max-width: 480px) {
-            .current-round {
-                font-size: 1rem;
-                width: 100%;
-                order: -1;
-            }
-        }
-        
-        .exercises-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .exercises-table th {
-            background: linear-gradient(45deg, #0066ff, #004499);
-            color: white;
-            padding: 12px 8px;
-            text-align: left;
-            font-weight: 700;
-            font-size: 0.9rem;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        @media (max-width: 480px) {
-            .exercises-table th {
-                padding: 10px 5px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        .exercises-table td {
-            padding: 12px 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.02);
-            vertical-align: middle;
-        }
-        
-        @media (max-width: 480px) {
-            .exercises-table td {
-                padding: 10px 5px;
-            }
-        }
-        
-        .exercises-table tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .exercise-name {
-            font-weight: 700;
-            color: #ffffff;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 480px) {
-            .exercise-name {
-                font-size: 0.8rem;
-            }
-        }
-        
-        .exercise-emoji {
-            font-size: 1.2rem;
-            margin-right: 8px;
-        }
-        
-        @media (max-width: 480px) {
-            .exercise-emoji {
-                font-size: 1rem;
-                margin-right: 5px;
-            }
-        }
-        
-        .reps-display {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #00ff00;
-            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
-            text-align: center;
-        }
-        
-        @media (max-width: 480px) {
-            .reps-display {
-                font-size: 1rem;
-            }
-        }
-        
-        .check-btn {
-            background: linear-gradient(45deg, #00ff00, #00cc00);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 15px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            width: 100%;
-            min-width: 80px;
-        }
-        
-        @media (max-width: 480px) {
-            .check-btn {
-                padding: 10px 8px;
-                font-size: 0.7rem;
-                min-width: 70px;
-            }
-        }
-        
-        .check-btn:hover, .check-btn:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 255, 0, 0.5);
-            outline: none;
-        }
-        
-        .check-btn:active {
-            transform: translateY(0);
-        }
-        
-        .check-btn.completed {
-            background: linear-gradient(45deg, #ff6600, #cc4400);
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
-        }
-        
-        .check-btn.completed:hover, .check-btn.completed:focus {
-            box-shadow: 0 6px 20px rgba(255, 102, 0, 0.5);
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        @media (max-width: 480px) {
-            .stats {
-                grid-template-columns: 1fr;
-                gap: 10px;
-                margin-top: 20px;
-            }
-        }
-        
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        @media (max-width: 480px) {
-            .stat-card {
-                padding: 12px;
-            }
-        }
-        
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-        }
-        
-        @media (max-width: 480px) {
-            .stat-number {
-                font-size: 1.3rem;
-            }
-        }
-        
-        .stat-label {
-            color: #cccccc;
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-        
-        @media (max-width: 480px) {
-            .stat-label {
-                font-size: 0.7rem;
-            }
-        }
-        
-        .reset-btn {
-            background: linear-gradient(45deg, #ff0066, #cc0044);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 102, 0.3);
-            margin-top: 20px;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-        
-        @media (max-width: 480px) {
-            .reset-btn {
-                padding: 14px 20px;
-                font-size: 0.8rem;
-                width: 100%;
-            }
-        }
-        
-        .reset-btn:hover, .reset-btn:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 102, 0.5);
-            outline: none;
-        }
-        
-        .reset-btn:active {
-            transform: translateY(0);
-        }
-        
-        .workout-complete {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(45deg, #ff6600, #ff0000);
-            border-radius: 15px;
-            margin-top: 20px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @media (max-width: 480px) {
-            .workout-complete {
-                padding: 15px;
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .workout-complete h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        
-        @media (max-width: 480px) {
-            .workout-complete h2 {
-                font-size: 1.2rem;
-            }
-        }
-        
-        .workout-complete p {
-            font-size: 1rem;
-        }
-        
-        @media (max-width: 480px) {
-            .workout-complete p {
-                font-size: 0.9rem;
-            }
-        }
-        
-        .phase-indicator {
-            font-size: 0.9rem;
-            color: #ffff00;
-            margin-left: 15px;
-            font-weight: 700;
-            text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
-        }
-        
-        @media (max-width: 480px) {
-            .phase-indicator {
-                font-size: 0.8rem;
-                margin-left: 0;
-                margin-top: 5px;
-                display: block;
-            }
-        }
-        
-        /* Mejoras para touch y accesibilidad */
-        button {
-            min-height: 44px;
-            min-width: 44px;
-        }
-        
-        @media (max-width: 480px) {
-            button {
-                min-height: 48px;
-            }
-        }
-        
-        /* Evitar zoom en inputs en iOS */
-        input, select, textarea {
-            font-size: 16px;
-        }
-        
-        /* Modal para imágenes */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 90%;
-            max-height: 90%;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { 
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0;
-            }
-            to { 
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-        }
-        
-        .modal-image {
-            width: 100%;
-            height: auto;
-            max-width: 500px;
-            max-height: 400px;
-            object-fit: contain;
-            border-radius: 10px;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        .modal-title {
-            color: #ffffff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-        
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: linear-gradient(45deg, #ff0066, #cc0044);
-            border: none;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 102, 0.3);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-        
-        .close-btn:hover, .close-btn:focus {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 0, 102, 0.5);
-            outline: none;
-        }
-        
-        .exercise-name-clickable {
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: underline;
-            text-decoration-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .exercise-name-clickable:hover {
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-            text-decoration-color: #00ff00;
-        }
-        
-        @media (max-width: 480px) {
-            .modal-content {
-                max-width: 95%;
-                max-height: 95%;
-                padding: 15px;
-            }
-            
-            .modal-image {
-                max-height: 300px;
-            }
-            
-            .modal-title {
-                font-size: 1rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,
+user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Spider-Man HIIT Tracker</title>
+<style>
+@import
+url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: 'Orbitron', sans-serif;
+background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+min-height: 100vh;
+color: #ffffff;
+position: relative;
+overflow-x: hidden;
+-webkit-text-size-adjust: 100%;
+-ms-text-size-adjust: 100%;
+}
+body::before {
+content: '';
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background:
+radial-gradient(circle at 20% 20%, rgba(255, 0, 0, 0.1) 0%, transparent 50%),
+radial-gradient(circle at 80% 80%, rgba(0, 100, 255, 0.1) 0%, transparent 50%),
+url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60'
+xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg
+
+fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36
+34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6
+34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6
+4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+z-index: -1;
+}
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 10px;
+}
+.header {
+text-align: center;
+margin-bottom: 30px;
+position: relative;
+padding: 20px 0;
+}
+.header::before {
+content: '🕷';
+position: absolute;
+top: 0;
+left: 50%;
+transform: translateX(-50%);
+font-size: 2rem;
+animation: swing 2s ease-in-out infinite;
+}
+@keyframes swing {
+0%, 100% { transform: translateX(-50%) rotate(0deg); }
+50% { transform: translateX(-50%) rotate(10deg); }
+}
+h1 {
+font-size: 2rem;
+font-weight: 900;
+background: linear-gradient(45deg, #ff0000, #0066ff, #ff0000);
+background-size: 200% 200%;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+
+animation: spideyGlow 3s ease-in-out infinite;
+margin-top: 30px;
+text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+line-height: 1.2;
+}
+@media (max-width: 480px) {
+h1 {
+font-size: 1.5rem;
+}
+}
+@keyframes spideyGlow {
+0%, 100% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+}
+.subtitle {
+font-size: 0.9rem;
+color: #cccccc;
+margin-top: 10px;
+letter-spacing: 1px;
+}
+@media (max-width: 480px) {
+.subtitle {
+font-size: 0.8rem;
+letter-spacing: 0.5px;
+}
+}
+.progress-section {
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 15px;
+padding: 20px;
+margin-bottom: 20px;
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+@media (max-width: 480px) {
+.progress-section {
+
+padding: 15px;
+border-radius: 10px;
+}
+}
+.round-selector {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 15px;
+margin-bottom: 25px;
+flex-wrap: wrap;
+}
+@media (max-width: 480px) {
+.round-selector {
+gap: 10px;
+margin-bottom: 20px;
+}
+}
+.round-btn {
+background: linear-gradient(45deg, #ff0000, #cc0000);
+border: none;
+color: white;
+padding: 10px 16px;
+border-radius: 20px;
+font-family: 'Orbitron', sans-serif;
+font-weight: 700;
+font-size: 0.9rem;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+-webkit-tap-highlight-color: transparent;
+touch-action: manipulation;
+}
+@media (max-width: 480px) {
+.round-btn {
+padding: 12px 20px;
+font-size: 0.8rem;
+}
+}
+
+.round-btn:hover, .round-btn:focus {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
+outline: none;
+}
+.round-btn:active {
+transform: translateY(0);
+}
+.round-btn:disabled {
+background: #666;
+cursor: not-allowed;
+transform: none;
+box-shadow: none;
+}
+.current-round {
+font-size: 1.2rem;
+font-weight: 700;
+color: #00ff00;
+text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+text-align: center;
+}
+@media (max-width: 480px) {
+.current-round {
+font-size: 1rem;
+width: 100%;
+order: -1;
+}
+}
+.exercises-table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 20px;
+}
+.exercises-table th {
+background: linear-gradient(45deg, #0066ff, #004499);
+color: white;
+
+padding: 12px 8px;
+text-align: left;
+font-weight: 700;
+font-size: 0.9rem;
+border-radius: 8px 8px 0 0;
+}
+@media (max-width: 480px) {
+.exercises-table th {
+padding: 10px 5px;
+font-size: 0.8rem;
+}
+}
+.exercises-table td {
+padding: 12px 8px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+background: rgba(255, 255, 255, 0.02);
+vertical-align: middle;
+}
+@media (max-width: 480px) {
+.exercises-table td {
+padding: 10px 5px;
+}
+}
+.exercises-table tr:hover {
+background: rgba(255, 255, 255, 0.05);
+}
+.exercise-name {
+font-weight: 700;
+color: #ffffff;
+font-size: 0.9rem;
+}
+@media (max-width: 480px) {
+.exercise-name {
+font-size: 0.8rem;
+}
+}
+
+.exercise-emoji {
+font-size: 1.2rem;
+margin-right: 8px;
+}
+@media (max-width: 480px) {
+.exercise-emoji {
+font-size: 1rem;
+margin-right: 5px;
+}
+}
+.reps-display {
+font-size: 1.1rem;
+font-weight: 700;
+color: #00ff00;
+text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+text-align: center;
+}
+@media (max-width: 480px) {
+.reps-display {
+font-size: 1rem;
+}
+}
+.check-btn {
+background: linear-gradient(45deg, #00ff00, #00cc00);
+border: none;
+color: white;
+padding: 8px 12px;
+border-radius: 15px;
+font-family: 'Orbitron', sans-serif;
+font-weight: 700;
+font-size: 0.8rem;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+-webkit-tap-highlight-color: transparent;
+touch-action: manipulation;
+width: 100%;
+min-width: 80px;
+}
+
+@media (max-width: 480px) {
+.check-btn {
+padding: 10px 8px;
+font-size: 0.7rem;
+min-width: 70px;
+}
+}
+.check-btn:hover, .check-btn:focus {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(0, 255, 0, 0.5);
+outline: none;
+}
+.check-btn:active {
+transform: translateY(0);
+}
+.check-btn.completed {
+background: linear-gradient(45deg, #ff6600, #cc4400);
+box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+}
+.check-btn.completed:hover, .check-btn.completed:focus {
+box-shadow: 0 6px 20px rgba(255, 102, 0, 0.5);
+}
+
+/* Estilos para los temporizadores */
+.timers-section {
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 15px;
+padding: 20px;
+margin-bottom: 20px;
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.timers-title {
+text-align: center;
+font-size: 1.3rem;
+font-weight: 700;
+color: #ffff00;
+margin-bottom: 20px;
+text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+}
+
+.timers-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 20px;
+}
+
+@media (max-width: 480px) {
+.timers-grid {
+grid-template-columns: 1fr;
+gap: 15px;
+}
+.timers-section {
+padding: 15px;
+}
+.timers-title {
+font-size: 1.1rem;
+}
+}
+
+.timer-card {
+background: rgba(255, 255, 255, 0.08);
+border: 1px solid rgba(255, 255, 255, 0.15);
+border-radius: 12px;
+padding: 20px;
+text-align: center;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+transition: all 0.3s ease;
+}
+
+.timer-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+}
+
+.timer-display {
+font-size: 2.5rem;
+font-weight: 900;
+color: #00ff00;
+text-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+margin: 15px 0;
+font-family: 'Orbitron', monospace;
+}
+
+.timer-display.running {
+color: #ffff00;
+text-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+animation: timerPulse 1s ease-in-out infinite;
+}
+
+.timer-display.finished {
+color: #ff0000;
+text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+animation: timerBlink 0.5s ease-in-out infinite;
+}
+
+@keyframes timerPulse {
+0%, 100% { transform: scale(1); }
+50% { transform: scale(1.05); }
+}
+
+@keyframes timerBlink {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.5; }
+}
+
+.timer-label {
+font-size: 1.1rem;
+font-weight: 700;
+color: #ffffff;
+margin-bottom: 15px;
+}
+
+.timer-btn {
+background: linear-gradient(45deg, #00ff00, #00cc00);
+border: none;
+color: white;
+padding: 12px 20px;
+border-radius: 20px;
+font-family: 'Orbitron', sans-serif;
+font-weight: 700;
+font-size: 0.9rem;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+margin: 0 5px;
+-webkit-tap-highlight-color: transparent;
+touch-action: manipulation;
+min-width: 80px;
+}
+
+.timer-btn:hover, .timer-btn:focus {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(0, 255, 0, 0.5);
+outline: none;
+}
+
+.timer-btn:active {
+transform: translateY(0);
+}
+
+.timer-btn.pause {
+background: linear-gradient(45deg, #ffff00, #cccc00);
+box-shadow: 0 4px 15px rgba(255, 255, 0, 0.3);
+}
+
+.timer-btn.pause:hover, .timer-btn.pause:focus {
+box-shadow: 0 6px 20px rgba(255, 255, 0, 0.5);
+}
+
+.timer-btn.reset {
+background: linear-gradient(45deg, #ff0066, #cc0044);
+box-shadow: 0 4px 15px rgba(255, 0, 102, 0.3);
+}
+
+.timer-btn.reset:hover, .timer-btn.reset:focus {
+box-shadow: 0 6px 20px rgba(255, 0, 102, 0.5);
+}
+
+@media (max-width: 480px) {
+.timer-display {
+font-size: 2rem;
+}
+.timer-btn {
+padding: 10px 15px;
+font-size: 0.8rem;
+min-width: 70px;
+margin: 2px;
+}
+.timer-card {
+padding: 15px;
+}
+}
+
+.stats {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+gap: 15px;
+margin-top: 25px;
+}
+@media (max-width: 480px) {
+.stats {
+grid-template-columns: 1fr;
+gap: 10px;
+margin-top: 20px;
+}
+}
+
+.stat-card {
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+padding: 15px;
+text-align: center;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+@media (max-width: 480px) {
+.stat-card {
+padding: 12px;
+}
+}
+.stat-number {
+font-size: 1.5rem;
+font-weight: 900;
+color: #00ff00;
+text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+@media (max-width: 480px) {
+.stat-number {
+font-size: 1.3rem;
+}
+}
+.stat-label {
+color: #cccccc;
+font-size: 0.8rem;
+margin-top: 5px;
+}
+@media (max-width: 480px) {
+.stat-label {
+font-size: 0.7rem;
+}
+}
+.reset-btn {
+background: linear-gradient(45deg, #ff0066, #cc0044);
+
+border: none;
+color: white;
+padding: 12px 24px;
+border-radius: 20px;
+font-family: 'Orbitron', sans-serif;
+font-weight: 700;
+font-size: 0.9rem;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 4px 15px rgba(255, 0, 102, 0.3);
+margin-top: 20px;
+-webkit-tap-highlight-color: transparent;
+touch-action: manipulation;
+}
+@media (max-width: 480px) {
+.reset-btn {
+padding: 14px 20px;
+font-size: 0.8rem;
+width: 100%;
+}
+}
+.reset-btn:hover, .reset-btn:focus {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(255, 0, 102, 0.5);
+outline: none;
+}
+.reset-btn:active {
+transform: translateY(0);
+}
+.workout-complete {
+text-align: center;
+padding: 20px;
+background: linear-gradient(45deg, #ff6600, #ff0000);
+border-radius: 15px;
+margin-top: 20px;
+animation: pulse 2s ease-in-out infinite;
+}
+@media (max-width: 480px) {
+
+.workout-complete {
+padding: 15px;
+}
+}
+@keyframes pulse {
+0%, 100% { transform: scale(1); }
+50% { transform: scale(1.05); }
+}
+.workout-complete h2 {
+font-size: 1.5rem;
+margin-bottom: 10px;
+}
+@media (max-width: 480px) {
+.workout-complete h2 {
+font-size: 1.2rem;
+}
+}
+.workout-complete p {
+font-size: 1rem;
+}
+@media (max-width: 480px) {
+.workout-complete p {
+font-size: 0.9rem;
+}
+}
+.phase-indicator {
+font-size: 0.9rem;
+color: #ffff00;
+margin-left: 15px;
+font-weight: 700;
+text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+}
+@media (max-width: 480px) {
+.phase-indicator {
+font-size: 0.8rem;
+margin-left: 0;
+
+margin-top: 5px;
+display: block;
+}
+}
+/* Mejoras para touch y accesibilidad */
+button {
+min-height: 44px;
+min-width: 44px;
+}
+@media (max-width: 480px) {
+button {
+min-height: 48px;
+}
+}
+/* Evitar zoom en inputs en iOS */
+input, select, textarea {
+font-size: 16px;
+}
+/* Modal para imágenes */
+.modal {
+display: none;
+position: fixed;
+z-index: 1000;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.8);
+backdrop-filter: blur(5px);
+animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+.modal-content {
+position: absolute;
+
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+max-width: 90%;
+max-height: 90%;
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 15px;
+padding: 20px;
+box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+from {
+transform: translate(-50%, -50%) scale(0.8);
+opacity: 0;
+}
+to {
+transform: translate(-50%, -50%) scale(1);
+opacity: 1;
+}
+}
+.modal-image {
+width: 100%;
+height: auto;
+max-width: 500px;
+max-height: 400px;
+object-fit: contain;
+border-radius: 10px;
+display: block;
+margin: 0 auto;
+}
+.modal-title {
+color: #ffffff;
+font-size: 1.2rem;
+font-weight: 700;
+text-align: center;
+margin-bottom: 15px;
+text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+}
+.close-btn {
+position: absolute;
+top: 10px;
+right: 15px;
+background: linear-gradient(45deg, #ff0066, #cc0044);
+border: none;
+color: white;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+font-size: 1.2rem;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.3s ease;
+box-shadow: 0 4px 15px rgba(255, 0, 102, 0.3);
+-webkit-tap-highlight-color: transparent;
+touch-action: manipulation;
+}
+.close-btn:hover, .close-btn:focus {
+transform: scale(1.1);
+box-shadow: 0 6px 20px rgba(255, 0, 102, 0.5);
+outline: none;
+}
+.exercise-name-clickable {
+cursor: pointer;
+transition: all 0.3s ease;
+text-decoration: underline;
+text-decoration-color: rgba(255, 255, 255, 0.3);
+}
+.exercise-name-clickable:hover {
+color: #00ff00;
+text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+text-decoration-color: #00ff00;
+}
+@media (max-width: 480px) {
+
+.modal-content {
+max-width: 95%;
+max-height: 95%;
+padding: 15px;
+}
+.modal-image {
+max-height: 300px;
+}
+.modal-title {
+font-size: 1rem;
+}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>SPIDER-MAN HIIT TRACKER</h1>
-            <div class="subtitle">CON GRANDES PODERES VIENEN GRANDES RESPONSABILIDADES</div>
-        </div>
-        
-        <div class="progress-section">
-            <div class="round-selector">
-                <button class="round-btn" onclick="previousRound()">← Anterior</button>
-                <div class="current-round">
-                    Ronda <span id="currentRound">1</span> / 19
-                    <span class="phase-indicator" id="phaseIndicator">FASE ASCENDENTE</span>
-                </div>
-                <button class="round-btn" onclick="nextRound()">Siguiente →</button>
-            </div>
-            
-            <table class="exercises-table">
-                <thead>
-                    <tr>
-                        <th>Ejercicio</th>
-                        <th>Repeticiones</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody id="exercisesList">
-                    <!-- Se llena dinámicamente -->
-                </tbody>
-            </table>
-            
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalExercises">0</div>
-                    <div class="stat-label">Ejercicios Completados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalReps">0</div>
-                    <div class="stat-label">Repeticiones Totales</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="completionPercentage">0%</div>
-                    <div class="stat-label">Progreso Total</div>
-                </div>
-            </div>
-            
-            <div style="text-align: center;">
-                <button class="reset-btn" onclick="resetWorkout()">🔄 Reiniciar Entrenamiento</button>
-            </div>
-            
-            <div id="workoutComplete" class="workout-complete" style="display: none;">
-                <h2>🕷️ ¡ENTRENAMIENTO COMPLETADO! 🕷️</h2>
-                <p>¡Has completado tu rutina HIIT como un verdadero Spider-Man!</p>
-            </div>
-        </div>
-        
-        <!-- Modal para mostrar imágenes de ejercicios -->
-        <div id="exerciseModal" class="modal">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal()">×</button>
-                <h3 id="modalTitle" class="modal-title"></h3>
-                <img id="modalImage" class="modal-image" src="" alt="">
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        const exercises = [
-            { 
-                name: 'Paso del oso', 
-                emoji: '🐻', 
-                id: 'bearcrawl',
-                image: 'https://www.wikihow.com/images_en/thumb/3/34/Do-Bear-Crawls-Step-10.jpg/v4-460px-Do-Bear-Crawls-Step-10.jpg'
-            },
-            { 
-                name: 'Plancha con toque de hombros', 
-                emoji: '🤲', 
-                id: 'shouldertaps',
-                image: 'https://thumbs.dreamstime.com/b/tabl%C3%B3n-hombro-grifos-mujer-ejercicio-en-casa-gu%C3%ADa-hembra-haciendo-toques-de-desde-la-tabla-esquema-concepto-chica-trabajando-su-218680936.jpg'
-            },
-            { 
-                name: 'Thruster con mancuernas', 
-                emoji: '🏋️', 
-                id: 'thrusters',
-                image: 'https://www.zonawod.com/wp-content/uploads/dumbbell-thrusters-con-mancuernas.jpeg'
-            },
-            { 
-                name: 'Renegade Row', 
-                emoji: '💪', 
-                id: 'renegaderow',
-                image: 'https://static.strengthlevel.com/images/exercises/renegade-row/renegade-row-800.jpg'
-            },
-            { 
-                name: 'Flexiones', 
-                emoji: '🔥', 
-                id: 'pushups',
-                image: 'https://media.istockphoto.com/id/882882258/es/vector/el-joven-afroamericana-activos-est%C3%A1-haciendo-la-empuja-hacia-arriba-el-ejercicio.jpg?s=612x612&w=0&k=20&c=oeVJw6tTg2Q54puyY1wBof74k-nDLR92WgKZfy2_ds0='
-            }
-        ];
-        
-        let currentRound = 1;
-        let completedExercises = {};
-        let totalRounds = 19; // 1-10 subiendo, 9-1 bajando
-        
-        function getCurrentReps() {
-            if (currentRound <= 10) {
-                return currentRound;
-            } else {
-                return 20 - currentRound;
-            }
-        }
-        
-        function getPhase() {
-            return currentRound <= 10 ? 'FASE ASCENDENTE' : 'FASE DESCENDENTE';
-        }
-        
-        function renderExercises() {
-            const tbody = document.getElementById('exercisesList');
-            const currentReps = getCurrentReps();
-            
-            tbody.innerHTML = '';
-            
-            exercises.forEach(exercise => {
-                const isCompleted = completedExercises[currentRound] && completedExercises[currentRound][exercise.id];
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>
-                        <span class="exercise-emoji">${exercise.emoji}</span>
-                        <span class="exercise-name exercise-name-clickable" onclick="openModal('${exercise.id}', '${exercise.name}', '${exercise.image}')">${exercise.name}</span>
-                    </td>
-                    <td class="reps-display">${currentReps}</td>
-                    <td>
-                        <button class="check-btn ${isCompleted ? 'completed' : ''}" 
-                                onclick="toggleExercise('${exercise.id}')">
-                            ${isCompleted ? '✓ Completado' : '○ Pendiente'}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function openModal(exerciseId, exerciseName, imageUrl) {
-            const modal = document.getElementById('exerciseModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalImage = document.getElementById('modalImage');
-            
-            modalTitle.textContent = exerciseName;
-            modalImage.src = imageUrl;
-            modalImage.alt = exerciseName;
-            modal.style.display = 'block';
-            
-            // Prevenir scroll del body cuando el modal está abierto
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            const modal = document.getElementById('exerciseModal');
-            modal.style.display = 'none';
-            
-            // Restaurar scroll del body
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Cerrar modal al hacer clic fuera de la imagen
-        window.onclick = function(event) {
-            const modal = document.getElementById('exerciseModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-        
-        // Cerrar modal con tecla Escape
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeModal();
-            }
-        });
-        
-        function toggleExercise(exerciseId) {
-            if (!completedExercises[currentRound]) {
-                completedExercises[currentRound] = {};
-            }
-            
-            completedExercises[currentRound][exerciseId] = !completedExercises[currentRound][exerciseId];
-            renderExercises();
-            updateStats();
-            checkWorkoutComplete();
-        }
-        
-        function updateStats() {
-            let totalExercises = 0;
-            let totalReps = 0;
-            
-            for (let round = 1; round <= totalRounds; round++) {
-                const reps = round <= 10 ? round : 20 - round;
-                if (completedExercises[round]) {
-                    Object.values(completedExercises[round]).forEach(completed => {
-                        if (completed) {
-                            totalExercises++;
-                            totalReps += reps;
-                        }
-                    });
-                }
-            }
-            
-            const totalPossibleExercises = exercises.length * totalRounds;
-            const completionPercentage = Math.round((totalExercises / totalPossibleExercises) * 100);
-            
-            document.getElementById('totalExercises').textContent = totalExercises;
-            document.getElementById('totalReps').textContent = totalReps;
-            document.getElementById('completionPercentage').textContent = completionPercentage + '%';
-        }
-        
-        function checkWorkoutComplete() {
-            let allCompleted = true;
-            
-            for (let round = 1; round <= totalRounds; round++) {
-                if (!completedExercises[round]) {
-                    allCompleted = false;
-                    break;
-                }
-                
-                for (let exercise of exercises) {
-                    if (!completedExercises[round][exercise.id]) {
-                        allCompleted = false;
-                        break;
-                    }
-                }
-                
-                if (!allCompleted) break;
-            }
-            
-            document.getElementById('workoutComplete').style.display = allCompleted ? 'block' : 'none';
-        }
-        
-        function nextRound() {
-            if (currentRound < totalRounds) {
-                currentRound++;
-                updateRoundDisplay();
-                renderExercises();
-            }
-        }
-        
-        function previousRound() {
-            if (currentRound > 1) {
-                currentRound--;
-                updateRoundDisplay();
-                renderExercises();
-            }
-        }
-        
-        function updateRoundDisplay() {
-            document.getElementById('currentRound').textContent = currentRound;
-            document.getElementById('phaseIndicator').textContent = getPhase();
-        }
-        
-        function resetWorkout() {
-            if (confirm('¿Estás seguro de que quieres reiniciar todo el entrenamiento?')) {
-                completedExercises = {};
-                currentRound = 1;
-                updateRoundDisplay();
-                renderExercises();
-                updateStats();
-                document.getElementById('workoutComplete').style.display = 'none';
-            }
-        }
-        
-        // Inicializar la aplicación
-        renderExercises();
-        updateStats();
-    </script>
-</body>
-</html>
+<div class="container">
+<div class="header">
+<h1>SPIDER-MAN HIIT TRACKER</h1>
+<div class="subtitle">CON GRANDES PODERES VIENEN GRANDES
+RESPONSABILIDADES</div>
+</div>
+<div class="progress-section">
+<div class="round-selector">
+<button class="round-btn" onclick="previousRound()">← Anterior</button>
+<div class="current-round">
+Ronda <span id="currentRound">1</span> / 19
+<span class="phase-indicator" id="phaseIndicator">FASE ASCENDENTE</span>
+</div>
+<button class="round-btn" onclick="nextRound()">Siguiente →</button>
+</div>
+<table class="exercises-table">
+<thead>
+<tr>
+<th>Ejercicio</th>
+<th>Repeticiones</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody id="exercisesList">
+
+<!-- Se llena dinámicamente -->
+</tbody>
+</table>
+</div>
+
+<!-- Sección de temporizadores -->
+<div class="timers-section">
+<h2 class="timers-title">⏱️ TEMPORIZADORES DE DESCANSO</h2>
+<div class="timers-grid">
+<div class="timer-card">
+<div class="timer-label">⚡ DESCANSO CORTO</div>
+<div class="timer-display" id="timer1">01:00</div>
+<div>
+<button class="timer-btn" onclick="startTimer(1)">▶️ Iniciar</button>
+<button class="timer-btn pause" onclick="pauseTimer(1)">⏸️ Pausar</button>
+<button class="timer-btn reset" onclick="resetTimer(1)">🔄 Reset</button>
+</div>
+</div>
+
+<div class="timer-card">
+<div class="timer-label">🔥 DESCANSO MEDIO</div>
+<div class="timer-display" id="timer2">02:00</div>
+<div>
+<button class="timer-btn" onclick="startTimer(2)">▶️ Iniciar</button>
+<button class="timer-btn pause" onclick="pauseTimer(2)">⏸️ Pausar</button>
+<button class="timer-btn reset" onclick="resetTimer(2)">🔄 Reset</button>
+</div>
+</div>
+
+<div class="timer-card">
+<div class="timer-label">💪 DESCANSO LARGO</div>
+<div class="timer-display" id="timer3">03:00</div>
+<div>
+<button class="timer-btn" onclick="startTimer(3)">▶️ Iniciar</button>
+<button class="timer-btn pause" onclick="pauseTimer(3)">⏸️ Pausar</button>
+<button class="timer-btn reset" onclick="resetTimer(3)">🔄 Reset</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="progress-section">
+<div class="stats">
+<div class="stat-card">
+<div class="stat-number" id="totalExercises">0</div>
+<div class="stat-label">Ejercicios Completados</div>
+</div>
+<div class="stat-card">
+<div class="stat-number" id="totalReps">0</div>
+<div class="stat-label">Repeticiones Totales</div>
+</div>
+<div class="stat-card">
+<div class="stat-number" id="completionPercentage">0%</div>
+<div class="stat-label">Progreso Total</div>
+</div>
+</div>
+<div style="text-align: center;">
+<button class="reset-btn" onclick="resetWorkout()">🔄 Reiniciar
+Entrenamiento</button>
+</div>
+<div id="workoutComplete" class="workout-complete" style="display: none;">
+<h2>🕷 ¡ENTRENAMIENTO COMPLETADO! 🕷</h2>
+<p>¡Has completado tu rutina HIIT como un verdadero Spider-Man!</p>
+</div>
+</div>
+<!-- Modal para mostrar imágenes de ejercicios -->
+<div id="exerciseModal" class="modal">
+<div class="modal-content">
+<button class="close-btn" onclick="closeModal()">×</button>
+<h3 id="modalTitle" class="modal-title"></h3>
+<img id="modalImage" class="modal-image" src="" alt="">
+</div>
+</div>
+</div>
+<script>
+const exercises = [
+{
+
+name: 'Paso del oso',
+emoji: '🐻',
+id: 'bearcrawl',
+image:
+'https://www.wikihow.com/images_en/thumb/3/34/Do-Bear-Crawls-Step-10.jpg/v4-460px-Do-Be
+ar-Crawls-Step-10.jpg'
+},
+{
+name: 'Plancha con toque de hombros',
+emoji: '🤲',
+id: 'shouldertaps',
+image:
+'https://thumbs.dreamstime.com/b/tabl%C3%B3n-hombro-grifos-mujer-ejercicio-en-casa-gu%C3
+%ADa-hembra-haciendo-toques-de-desde-la-tabla-esquema-concepto-chica-trabajando-su-218
+680936.jpg'
+},
+{
+name: 'Thruster con mancuernas',
+emoji: '🏋',
+id: 'thrusters',
+image:
+'https://www.zonawod.com/wp-content/uploads/dumbbell-thrusters-con-mancuernas.jpeg'
+},
+{
+name: 'Renegade Row',
+emoji: '💪',
+id: 'renegaderow',
+image:
+'https://static.strengthlevel.com/images/exercises/renegade-row/renegade-row-800.jpg'
+},
+{
+name: 'Flexiones',
+emoji: '🔥',
+id: 'pushups',
+image:
+'https://media.istockphoto.com/id/882882258/es/vector/el-joven-afroamericana-activos-est%C3
+%A1-haciendo-la-empuja-hacia-arriba-el-ejercicio.jpg?s=612x612&w=0&k=20&c=oeVJw6tTg2Q
+54puyY1wBof74k-nDLR92WgKZfy2_ds0='
+}
+];
+
+// Variables para los temporizadores
+let timers = {
+1: { interval: null, timeLeft: 60, originalTime: 60, running: false },
+2: { interval: null,
