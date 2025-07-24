@@ -55,7 +55,7 @@
         }
         
         .header::before {
-            content: '🕷️';
+            content: 'ðŸ•·ï¸';
             position: absolute;
             top: 0;
             left: 50%;
@@ -106,6 +106,74 @@
                 font-size: 0.8rem;
                 letter-spacing: 0.5px;
             }
+        }
+        
+        .routine-selector {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .routine-selector h3 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .routine-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 480px) {
+            .routine-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        .routine-btn {
+            background: linear-gradient(45deg, #0066ff, #004499);
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-width: 200px;
+        }
+        
+        .routine-btn:hover, .routine-btn:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.5);
+            outline: none;
+        }
+        
+        .routine-btn:active {
+            transform: translateY(0);
+        }
+        
+        .routine-btn.active {
+            background: linear-gradient(45deg, #ff6600, #cc4400);
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+        }
+        
+        .routine-btn.active:hover, .routine-btn.active:focus {
+            box-shadow: 0 6px 20px rgba(255, 102, 0, 0.5);
         }
         
         .progress-section {
@@ -469,6 +537,14 @@
             }
         }
         
+        .timer-display {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffff00;
+            text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+            text-align: center;
+        }
+        
         /* Mejoras para touch y accesibilidad */
         button {
             min-height: 44px;
@@ -486,7 +562,7 @@
             font-size: 16px;
         }
         
-        /* Modal para imágenes */
+        /* Modal para imÃ¡genes */
         .modal {
             display: none;
             position: fixed;
@@ -616,26 +692,40 @@
             <div class="subtitle">CON GRANDES PODERES VIENEN GRANDES RESPONSABILIDADES</div>
         </div>
         
+        <div class="routine-selector">
+            <h3>ðŸ•¸ï¸ Elige tu Rutina de Entrenamiento</h3>
+            <div class="routine-options">
+                <button class="routine-btn active" onclick="selectRoutine('original')">
+                    ðŸ•·ï¸ Rutina Original<br>
+                    <small>(19 rondas dinÃ¡micas)</small>
+                </button>
+                <button class="routine-btn" onclick="selectRoutine('alternative')">
+                    âš¡ Rutina Alternativa<br>
+                    <small>(Circuito + Core)</small>
+                </button>
+            </div>
+        </div>
+        
         <div class="progress-section">
-            <div class="round-selector">
-                <button class="round-btn" onclick="previousRound()">← Anterior</button>
-                <div class="current-round">
-                    Ronda <span id="currentRound">1</span> / 19
+            <div class="round-selector" id="roundSelector">
+                <button class="round-btn" onclick="previousRound()">â† Anterior</button>
+                <div class="current-round" id="currentRoundDisplay">
+                    Ronda <span id="currentRound">1</span> / <span id="totalRounds">19</span>
                     <span class="phase-indicator" id="phaseIndicator">FASE ASCENDENTE</span>
                 </div>
-                <button class="round-btn" onclick="nextRound()">Siguiente →</button>
+                <button class="round-btn" onclick="nextRound()">Siguiente â†’</button>
             </div>
             
             <table class="exercises-table">
                 <thead>
                     <tr>
                         <th>Ejercicio</th>
-                        <th>Repeticiones</th>
+                        <th id="repsHeader">Repeticiones</th>
                         <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody id="exercisesList">
-                    <!-- Se llena dinámicamente -->
+                    <!-- Se llena dinÃ¡micamente -->
                 </tbody>
             </table>
             
@@ -646,7 +736,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="totalReps">0</div>
-                    <div class="stat-label">Repeticiones Totales</div>
+                    <div class="stat-label" id="repsLabel">Repeticiones Totales</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="completionPercentage">0%</div>
@@ -655,19 +745,19 @@
             </div>
             
             <div style="text-align: center;">
-                <button class="reset-btn" onclick="resetWorkout()">🔄 Reiniciar Entrenamiento</button>
+                <button class="reset-btn" onclick="resetWorkout()">ðŸ”„ Reiniciar Entrenamiento</button>
             </div>
             
             <div id="workoutComplete" class="workout-complete" style="display: none;">
-                <h2>🕷️ ¡ENTRENAMIENTO COMPLETADO! 🕷️</h2>
-                <p>¡Has completado tu rutina HIIT como un verdadero Spider-Man!</p>
+                <h2>ðŸ•·ï¸ Â¡ENTRENAMIENTO COMPLETADO! ðŸ•·ï¸</h2>
+                <p>Â¡Has completado tu rutina HIIT como un verdadero Spider-Man!</p>
             </div>
         </div>
         
-        <!-- Modal para mostrar imágenes de ejercicios -->
+        <!-- Modal para mostrar imÃ¡genes de ejercicios -->
         <div id="exerciseModal" class="modal">
             <div class="modal-content">
-                <button class="close-btn" onclick="closeModal()">×</button>
+                <button class="close-btn" onclick="closeModal()">Ã—</button>
                 <h3 id="modalTitle" class="modal-title"></h3>
                 <img id="modalImage" class="modal-image" src="" alt="">
             </div>
@@ -675,42 +765,189 @@
     </div>
     
     <script>
-        const exercises = [
-            { 
-                name: 'Paso del oso', 
-                emoji: '🐻', 
-                id: 'bearcrawl',
-                image: 'https://www.wikihow.com/images_en/thumb/3/34/Do-Bear-Crawls-Step-10.jpg/v4-460px-Do-Bear-Crawls-Step-10.jpg'
+        // Datos de rutinas
+        const routines = {
+            original: {
+                name: 'Rutina Original',
+                exercises: [
+                    { 
+                        name: 'Paso del oso', 
+                        emoji: 'ðŸ»', 
+                        id: 'bearcrawl',
+                        image: 'https://www.wikihow.com/images_en/thumb/3/34/Do-Bear-Crawls-Step-10.jpg/v4-460px-Do-Bear-Crawls-Step-10.jpg'
+                    },
+                    { 
+                        name: 'Plancha con toque de hombros', 
+                        emoji: 'ðŸ¤²', 
+                        id: 'shouldertaps',
+                        image: 'https://thumbs.dreamstime.com/b/tabl%C3%B3n-hombro-grifos-mujer-ejercicio-en-casa-gu%C3%ADa-hembra-haciendo-toques-de-desde-la-tabla-esquema-concepto-chica-trabajando-su-218680936.jpg'
+                    },
+                    { 
+                        name: 'Thruster con mancuernas', 
+                        emoji: 'ðŸ‹ï¸', 
+                        id: 'thrusters',
+                        image: 'https://www.zonawod.com/wp-content/uploads/dumbbell-thrusters-con-mancuernas.jpeg'
+                    },
+                    { 
+                        name: 'Renegade Row', 
+                        emoji: 'ðŸ’ª', 
+                        id: 'renegaderow',
+                        image: 'https://static.strengthlevel.com/images/exercises/renegade-row/renegade-row-800.jpg'
+                    },
+                    { 
+                        name: 'Flexiones', 
+                        emoji: 'ðŸ”¥', 
+                        id: 'pushups',
+                        image: 'https://media.istockphoto.com/id/882882258/es/vector/el-joven-afroamericana-activos-est%C3%A1-haciendo-la-empuja-hacia-arriba-el-ejercicio.jpg?s=612x612&w=0&k=20&c=oeVJw6tTg2Q54puyY1wBof74k-nDLR92WgKZfy2_ds0='
+                    }
+                ],
+                totalRounds: 19,
+                type: 'dynamic'
             },
-            { 
-                name: 'Plancha con toque de hombros', 
-                emoji: '🤲', 
-                id: 'shouldertaps',
-                image: 'https://thumbs.dreamstime.com/b/tabl%C3%B3n-hombro-grifos-mujer-ejercicio-en-casa-gu%C3%ADa-hembra-haciendo-toques-de-desde-la-tabla-esquema-concepto-chica-trabajando-su-218680936.jpg'
-            },
-            { 
-                name: 'Thruster con mancuernas', 
-                emoji: '🏋️', 
-                id: 'thrusters',
-                image: 'https://www.zonawod.com/wp-content/uploads/dumbbell-thrusters-con-mancuernas.jpeg'
-            },
-            { 
-                name: 'Renegade Row', 
-                emoji: '💪', 
-                id: 'renegaderow',
-                image: 'https://static.strengthlevel.com/images/exercises/renegade-row/renegade-row-800.jpg'
-            },
-            { 
-                name: 'Flexiones', 
-                emoji: '🔥', 
-                id: 'pushups',
-                image: 'https://media.istockphoto.com/id/882882258/es/vector/el-joven-afroamericana-activos-est%C3%A1-haciendo-la-empuja-hacia-arriba-el-ejercicio.jpg?s=612x612&w=0&k=20&c=oeVJw6tTg2Q54puyY1wBof74k-nDLR92WgKZfy2_ds0='
+            alternative: {
+                name: 'Rutina Alternativa',
+                parts: [
+                    {
+                        name: 'Circuito Principal',
+                        rounds: 4,
+                        restTime: '1 min',
+                        exercises: [
+                            { 
+                                name: 'Mountain Climbers', 
+                                emoji: 'ðŸ”ï¸', 
+                                id: 'mountainclimbers',
+                                reps: 40,
+                                note: '20 por pierna',
+                                image: 'https://www.ejerciciosencasa.es/wp-content/uploads/2017/09/mountain-climbers.jpg'
+                            },
+                            { 
+                                name: 'Jump Squats', 
+                                emoji: 'ðŸ¦µ', 
+                                id: 'jumpsquats',
+                                reps: 20,
+                                image: 'https://cdn.shopify.com/s/files/1/0269/5851/3900/files/unnamed_d7c5ad0c-6dcb-4c3c-8ac2-f4c3860f18be_480x480.png?v=1678295040'
+                            },
+                            { 
+                                name: 'Zancadas con salto alternas', 
+                                emoji: 'ðŸ¤¸', 
+                                id: 'jumpinglunges',
+                                reps: 20,
+                                note: '10 por pierna',
+                                image: 'https://www.verywellfit.com/thmb/VyCGNYqaEHOkIgBJG-YBkpZpqMk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4017839-jumping-lunges-annotated-5b6f95b4c9e77c0050d2a3e9.png'
+                            },
+                            { 
+                                name: 'Plank Jacks', 
+                                emoji: 'âš¡', 
+                                id: 'plankjacks',
+                                reps: 30,
+                                image: 'https://www.shape.com/thmb/CGr1IpgRd1VQtfNJ-JZZhR6UhNI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/plank-jacks-promo-2000-f83b3f4b91b24b8fb16f54a96bb6e0b0.jpg'
+                            },
+                            { 
+                                name: 'Russian Twists', 
+                                emoji: 'ðŸŒªï¸', 
+                                id: 'russiantwists',
+                                reps: 40,
+                                image: 'https://www.shape.com/thmb/YAQ2M8yEWh-j3_1NJrNEHI1Q3cU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Russian-Twist-GettyImages-1046904280-d6b84c3b5fab4ed9ae4d8c18b96c9a7d.jpg'
+                            },
+                            { 
+                                name: 'Fondos de TrÃ­ceps', 
+                                emoji: 'ðŸ’º', 
+                                id: 'tricepsdips',
+                                reps: 15,
+                                note: 'banco o suelo',
+                                image: 'https://cdn.muscleandstrength.com/sites/default/files/bench-dip.jpg'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Circuito Final Core',
+                        rounds: 2,
+                        workTime: '40" on',
+                        restTime: '20" off',
+                        exercises: [
+                            { 
+                                name: 'Hollow Hold', 
+                                emoji: 'ðŸª£', 
+                                id: 'hollowhold',
+                                duration: '40"',
+                                image: 'https://www.shape.com/thmb/2bGjPiZOHhRKpJ0TWhDO3K3lQAY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/hollow-body-hold-2000-e6d5be5b8f8a48cab3cc6e6b70b68c2e.jpg'
+                            },
+                            { 
+                                name: 'V-ups', 
+                                emoji: 'â¬†ï¸', 
+                                id: 'vups',
+                                duration: '40"',
+                                image: 'https://cdn.mos.cms.futurecdn.net/P8hKKgAFaZbgEfEvjYLqfA-1200-80.jpg'
+                            },
+                            { 
+                                name: 'Plancha lateral izquierda', 
+                                emoji: 'â¬…ï¸', 
+                                id: 'sideplankl',
+                                duration: '40"',
+                                image: 'https://www.verywellfit.com/thmb/XQHFEj8VhqnPa1vFjRFD1TepHH8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4035353-side-plank-annotated-5b6ca0ddc9e77c0050b7b0b0.png'
+                            },
+                            { 
+                                name: 'Plancha lateral derecha', 
+                                emoji: 'âž¡ï¸', 
+                                id: 'sideplankr',
+                                duration: '40"',
+                                image: 'https://www.verywellfit.com/thmb/XQHFEj8VhqnPa1vFjRFD1TepHH8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4035353-side-plank-annotated-5b6ca0ddc9e77c0050b7b0b0.png'
+                            },
+                            { 
+                                name: 'Leg Raises', 
+                                emoji: 'ðŸ¦µ', 
+                                id: 'legraises',
+                                duration: '40"',
+                                image: 'https://www.verywellfit.com/thmb/q9vRHDxn6VNZxFpRGSn0O6jEGa8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Leg-raises-annotated-5b6fa0cc46e0fb00253e27b9.png'
+                            }
+                        ]
+                    }
+                ],
+                type: 'circuit'
             }
-        ];
+        };
         
+        // Variables globales
+        let currentRoutine = 'original';
         let currentRound = 1;
+        let currentPart = 0;
         let completedExercises = {};
-        let totalRounds = 19; // 1-10 subiendo, 9-1 bajando
+        
+        function selectRoutine(routineName) {
+            // Cambiar rutina activa visualmente
+            document.querySelectorAll('.routine-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Cambiar rutina actual
+            currentRoutine = routineName;
+            currentRound = 1;
+            currentPart = 0;
+            completedExercises = {};
+            
+            // Actualizar interfaz segÃºn la rutina
+            updateInterface();
+            renderExercises();
+            updateStats();
+            document.getElementById('workoutComplete').style.display = 'none';
+        }
+        
+        function updateInterface() {
+            const routine = routines[currentRoutine];
+            
+            if (currentRoutine === 'original') {
+                document.getElementById('totalRounds').textContent = routine.totalRounds;
+                document.getElementById('repsHeader').textContent = 'Repeticiones';
+                document.getElementById('repsLabel').textContent = 'Repeticiones Totales';
+                updateRoundDisplay();
+            } else {
+                // Para rutina alternativa
+                const totalRounds = routine.parts.reduce((sum, part) => sum + part.rounds, 0);
+                document.getElementById('totalRounds').textContent = totalRounds;
+                document.getElementById('repsHeader').textContent = 'DuraciÃ³n/Reps';
+                document.getElementById('repsLabel').textContent = 'Ejercicios Totales';
+                updateAlternativeRoundDisplay();
+            }
+        }
         
         function getCurrentReps() {
             if (currentRound <= 10) {
@@ -724,11 +961,45 @@
             return currentRound <= 10 ? 'FASE ASCENDENTE' : 'FASE DESCENDENTE';
         }
         
+        function getCurrentPartAndRound() {
+            const routine = routines[currentRoutine];
+            let totalRounds = 0;
+            let partIndex = 0;
+            
+            for (let i = 0; i < routine.parts.length; i++) {
+                if (totalRounds + routine.parts[i].rounds >= currentRound) {
+                    partIndex = i;
+                    break;
+                }
+                totalRounds += routine.parts[i].rounds;
+            }
+            
+            const roundInPart = currentRound - totalRounds;
+            return { partIndex, roundInPart, part: routine.parts[partIndex] };
+        }
+        
+        function updateAlternativeRoundDisplay() {
+            const { partIndex, roundInPart, part } = getCurrentPartAndRound();
+            const phaseInfo = `${part.name} - Serie ${roundInPart}/${part.rounds}`;
+            
+            document.getElementById('phaseIndicator').textContent = phaseInfo;
+        }
+        
         function renderExercises() {
             const tbody = document.getElementById('exercisesList');
-            const currentReps = getCurrentReps();
-            
             tbody.innerHTML = '';
+            
+            if (currentRoutine === 'original') {
+                renderOriginalExercises();
+            } else {
+                renderAlternativeExercises();
+            }
+        }
+        
+        function renderOriginalExercises() {
+            const tbody = document.getElementById('exercisesList');
+            const currentReps = getCurrentReps();
+            const exercises = routines.original.exercises;
             
             exercises.forEach(exercise => {
                 const isCompleted = completedExercises[currentRound] && completedExercises[currentRound][exercise.id];
@@ -743,7 +1014,42 @@
                     <td>
                         <button class="check-btn ${isCompleted ? 'completed' : ''}" 
                                 onclick="toggleExercise('${exercise.id}')">
-                            ${isCompleted ? '✓ Completado' : '○ Pendiente'}
+                            ${isCompleted ? 'âœ“ Completado' : 'â—‹ Pendiente'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function renderAlternativeExercises() {
+            const tbody = document.getElementById('exercisesList');
+            const { partIndex, roundInPart, part } = getCurrentPartAndRound();
+            
+            part.exercises.forEach(exercise => {
+                const isCompleted = completedExercises[currentRound] && completedExercises[currentRound][exercise.id];
+                
+                let repsDisplay = '';
+                if (exercise.reps) {
+                    repsDisplay = exercise.reps;
+                    if (exercise.note) {
+                        repsDisplay += ` (${exercise.note})`;
+                    }
+                } else if (exercise.duration) {
+                    repsDisplay = exercise.duration;
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <span class="exercise-emoji">${exercise.emoji}</span>
+                        <span class="exercise-name exercise-name-clickable" onclick="openModal('${exercise.id}', '${exercise.name}', '${exercise.image}')">${exercise.name}</span>
+                    </td>
+                    <td class="reps-display">${repsDisplay}</td>
+                    <td>
+                        <button class="check-btn ${isCompleted ? 'completed' : ''}" 
+                                onclick="toggleExercise('${exercise.id}')">
+                            ${isCompleted ? 'âœ“ Completado' : 'â—‹ Pendiente'}
                         </button>
                     </td>
                 `;
@@ -761,7 +1067,7 @@
             modalImage.alt = exerciseName;
             modal.style.display = 'block';
             
-            // Prevenir scroll del body cuando el modal está abierto
+            // Prevenir scroll del body cuando el modal estÃ¡ abierto
             document.body.style.overflow = 'hidden';
         }
         
@@ -803,7 +1109,19 @@
             let totalExercises = 0;
             let totalReps = 0;
             
-            for (let round = 1; round <= totalRounds; round++) {
+            if (currentRoutine === 'original') {
+                updateOriginalStats();
+            } else {
+                updateAlternativeStats();
+            }
+        }
+        
+        function updateOriginalStats() {
+            let totalExercises = 0;
+            let totalReps = 0;
+            const routine = routines.original;
+            
+            for (let round = 1; round <= routine.totalRounds; round++) {
                 const reps = round <= 10 ? round : 20 - round;
                 if (completedExercises[round]) {
                     Object.values(completedExercises[round]).forEach(completed => {
@@ -815,7 +1133,7 @@
                 }
             }
             
-            const totalPossibleExercises = exercises.length * totalRounds;
+            const totalPossibleExercises = routine.exercises.length * routine.totalRounds;
             const completionPercentage = Math.round((totalExercises / totalPossibleExercises) * 100);
             
             document.getElementById('totalExercises').textContent = totalExercises;
@@ -823,30 +1141,111 @@
             document.getElementById('completionPercentage').textContent = completionPercentage + '%';
         }
         
-        function checkWorkoutComplete() {
-            let allCompleted = true;
+        function updateAlternativeStats() {
+            let totalExercises = 0;
+            let totalSets = 0;
+            const routine = routines.alternative;
+            
+            // Calcular total de rondas
+            const totalRounds = routine.parts.reduce((sum, part) => sum + part.rounds, 0);
             
             for (let round = 1; round <= totalRounds; round++) {
-                if (!completedExercises[round]) {
-                    allCompleted = false;
-                    break;
+                if (completedExercises[round]) {
+                    Object.values(completedExercises[round]).forEach(completed => {
+                        if (completed) {
+                            totalExercises++;
+                            totalSets++;
+                        }
+                    });
                 }
+            }
+            
+            // Calcular total posible de ejercicios
+            let totalPossibleExercises = 0;
+            routine.parts.forEach(part => {
+                totalPossibleExercises += part.exercises.length * part.rounds;
+            });
+            
+            const completionPercentage = Math.round((totalExercises / totalPossibleExercises) * 100);
+            
+            document.getElementById('totalExercises').textContent = totalExercises;
+            document.getElementById('totalReps').textContent = totalSets;
+            document.getElementById('completionPercentage').textContent = completionPercentage + '%';
+        }
+        
+        function checkWorkoutComplete() {
+            let allCompleted = true;
+            const routine = routines[currentRoutine];
+            let totalRounds;
+            
+            if (currentRoutine === 'original') {
+                totalRounds = routine.totalRounds;
+                const exercises = routine.exercises;
                 
-                for (let exercise of exercises) {
-                    if (!completedExercises[round][exercise.id]) {
+                for (let round = 1; round <= totalRounds; round++) {
+                    if (!completedExercises[round]) {
                         allCompleted = false;
                         break;
                     }
+                    
+                    for (let exercise of exercises) {
+                        if (!completedExercises[round][exercise.id]) {
+                            allCompleted = false;
+                            break;
+                        }
+                    }
+                    
+                    if (!allCompleted) break;
                 }
+            } else {
+                // Para rutina alternativa
+                totalRounds = routine.parts.reduce((sum, part) => sum + part.rounds, 0);
                 
-                if (!allCompleted) break;
+                for (let round = 1; round <= totalRounds; round++) {
+                    const { part } = getCurrentPartAndRoundForRound(round);
+                    
+                    if (!completedExercises[round]) {
+                        allCompleted = false;
+                        break;
+                    }
+                    
+                    for (let exercise of part.exercises) {
+                        if (!completedExercises[round][exercise.id]) {
+                            allCompleted = false;
+                            break;
+                        }
+                    }
+                    
+                    if (!allCompleted) break;
+                }
             }
             
             document.getElementById('workoutComplete').style.display = allCompleted ? 'block' : 'none';
         }
         
+        function getCurrentPartAndRoundForRound(roundNum) {
+            const routine = routines[currentRoutine];
+            let totalRounds = 0;
+            let partIndex = 0;
+            
+            for (let i = 0; i < routine.parts.length; i++) {
+                if (totalRounds + routine.parts[i].rounds >= roundNum) {
+                    partIndex = i;
+                    break;
+                }
+                totalRounds += routine.parts[i].rounds;
+            }
+            
+            const roundInPart = roundNum - totalRounds;
+            return { partIndex, roundInPart, part: routine.parts[partIndex] };
+        }
+        
         function nextRound() {
-            if (currentRound < totalRounds) {
+            const routine = routines[currentRoutine];
+            let maxRounds = currentRoutine === 'original' ? routine.totalRounds : 
+                          routine.parts.reduce((sum, part) => sum + part.rounds, 0);
+            
+            if (currentRound < maxRounds) {
                 currentRound++;
                 updateRoundDisplay();
                 renderExercises();
@@ -863,13 +1262,19 @@
         
         function updateRoundDisplay() {
             document.getElementById('currentRound').textContent = currentRound;
-            document.getElementById('phaseIndicator').textContent = getPhase();
+            
+            if (currentRoutine === 'original') {
+                document.getElementById('phaseIndicator').textContent = getPhase();
+            } else {
+                updateAlternativeRoundDisplay();
+            }
         }
         
         function resetWorkout() {
-            if (confirm('¿Estás seguro de que quieres reiniciar todo el entrenamiento?')) {
+            if (confirm('Â¿EstÃ¡s seguro de que quieres reiniciar todo el entrenamiento?')) {
                 completedExercises = {};
                 currentRound = 1;
+                currentPart = 0;
                 updateRoundDisplay();
                 renderExercises();
                 updateStats();
@@ -877,7 +1282,8 @@
             }
         }
         
-        // Inicializar la aplicación
+        // Inicializar la aplicaciÃ³n
+        updateInterface();
         renderExercises();
         updateStats();
     </script>
