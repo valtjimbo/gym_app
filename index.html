@@ -3,1289 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Spider-Man HIIT Tracker</title>
-            <style>
+    <title>Rutina Hipertrofia 4 Días</title>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * {margin: 0; padding: 0; box-sizing: border-box;}
         body {
             font-family: 'Orbitron', sans-serif;
             background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
             color: #ffffff;
-            position: relative;
             overflow-x: hidden;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
         }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(255, 0, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 100, 255, 0.1) 0%, transparent 50%),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            z-index: -1;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-            padding: 20px 0;
-        }
-        
-        .header::before {
-            content: 'ðŸ•·ï¸';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2rem;
-            animation: swing 2s ease-in-out infinite;
-        }
-        
-        @keyframes swing {
-            0%, 100% { transform: translateX(-50%) rotate(0deg); }
-            50% { transform: translateX(-50%) rotate(10deg); }
-        }
-        
+        .container {max-width: 1200px; margin: 0 auto; padding: 20px;}
+        .header {text-align: center; margin-bottom: 30px;}
         h1 {
-            font-size: 2rem;
-            font-weight: 900;
+            font-size: 2rem; font-weight: 900;
             background: linear-gradient(45deg, #ff0000, #0066ff, #ff0000);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: spideyGlow 3s ease-in-out infinite;
-            margin-top: 30px;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            line-height: 1.2;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-        }
-        
-        @keyframes spideyGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .subtitle {
-            font-size: 0.9rem;
-            color: #cccccc;
-            margin-top: 10px;
-            letter-spacing: 1px;
-        }
-        
-        @media (max-width: 480px) {
-            .subtitle {
-                font-size: 0.8rem;
-                letter-spacing: 0.5px;
-            }
-        }
-        
-        .routine-selector {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-        
-        .routine-selector h3 {
-            color: #ffffff;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-        
-        .routine-options {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 480px) {
-            .routine-options {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-        
-        .routine-btn {
-            background: linear-gradient(45deg, #0066ff, #004499);
-            border: none;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            min-width: 200px;
-        }
-        
-        .routine-btn:hover, .routine-btn:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.5);
-            outline: none;
-        }
-        
-        .routine-btn:active {
-            transform: translateY(0);
-        }
-        
-        .routine-btn.active {
-            background: linear-gradient(45deg, #ff6600, #cc4400);
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
-        }
-        
-        .routine-btn.active:hover, .routine-btn.active:focus {
-            box-shadow: 0 6px 20px rgba(255, 102, 0, 0.5);
-        }
-        
-        .progress-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        
-        @media (max-width: 480px) {
-            .progress-section {
-                padding: 15px;
-                border-radius: 10px;
-            }
-        }
-        
-        .round-selector {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 480px) {
-            .round-selector {
-                gap: 10px;
-                margin-bottom: 20px;
-            }
-        }
-        
-        .round-btn {
+        .subtitle {font-size: 1rem; color: #ccc; margin-top: 10px;}
+        .day-selector {display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 25px;}
+        .day-btn {
             background: linear-gradient(45deg, #ff0000, #cc0000);
-            border: none;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
+            border: none; color: white; padding: 10px 16px;
+            border-radius: 20px; font-weight: 700; cursor: pointer;
         }
-        
-        @media (max-width: 480px) {
-            .round-btn {
-                padding: 12px 20px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        .round-btn:hover, .round-btn:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
-            outline: none;
-        }
-        
-        .round-btn:active {
-            transform: translateY(0);
-        }
-        
-        .round-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .current-round {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-            text-align: center;
-        }
-        
-        @media (max-width: 480px) {
-            .current-round {
-                font-size: 1rem;
-                width: 100%;
-                order: -1;
-            }
-        }
-        
-        .exercises-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .exercises-table th {
-            background: linear-gradient(45deg, #0066ff, #004499);
-            color: white;
-            padding: 12px 8px;
-            text-align: left;
-            font-weight: 700;
-            font-size: 0.9rem;
-            border-radius: 8px 8px 0 0;
-        }
-        
-        @media (max-width: 480px) {
-            .exercises-table th {
-                padding: 10px 5px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        .exercises-table td {
-            padding: 12px 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.02);
-            vertical-align: middle;
-        }
-        
-        @media (max-width: 480px) {
-            .exercises-table td {
-                padding: 10px 5px;
-            }
-        }
-        
-        .exercises-table tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .exercise-name {
-            font-weight: 700;
-            color: #ffffff;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 480px) {
-            .exercise-name {
-                font-size: 0.8rem;
-            }
-        }
-        
-        .exercise-emoji {
-            font-size: 1.2rem;
-            margin-right: 8px;
-        }
-        
-        @media (max-width: 480px) {
-            .exercise-emoji {
-                font-size: 1rem;
-                margin-right: 5px;
-            }
-        }
-        
-        .reps-display {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #00ff00;
-            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
-            text-align: center;
-        }
-        
-        @media (max-width: 480px) {
-            .reps-display {
-                font-size: 1rem;
-            }
-        }
-        
-        .check-btn {
-            background: linear-gradient(45deg, #00ff00, #00cc00);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 15px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            width: 100%;
-            min-width: 80px;
-        }
-        
-        @media (max-width: 480px) {
-            .check-btn {
-                padding: 10px 8px;
-                font-size: 0.7rem;
-                min-width: 70px;
-            }
-        }
-        
-        .check-btn:hover, .check-btn:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 255, 0, 0.5);
-            outline: none;
-        }
-        
-        .check-btn:active {
-            transform: translateY(0);
-        }
-        
-        .check-btn.completed {
-            background: linear-gradient(45deg, #ff6600, #cc4400);
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
-        }
-        
-        .check-btn.completed:hover, .check-btn.completed:focus {
-            box-shadow: 0 6px 20px rgba(255, 102, 0, 0.5);
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        @media (max-width: 480px) {
-            .stats {
-                grid-template-columns: 1fr;
-                gap: 10px;
-                margin-top: 20px;
-            }
-        }
-        
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        @media (max-width: 480px) {
-            .stat-card {
-                padding: 12px;
-            }
-        }
-        
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-        }
-        
-        @media (max-width: 480px) {
-            .stat-number {
-                font-size: 1.3rem;
-            }
-        }
-        
-        .stat-label {
-            color: #cccccc;
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-        
-        @media (max-width: 480px) {
-            .stat-label {
-                font-size: 0.7rem;
-            }
-        }
-        
-        .reset-btn {
+        .day-btn:hover {transform: translateY(-2px);} 
+        .reset-day-btn {
             background: linear-gradient(45deg, #ff0066, #cc0044);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 102, 0.3);
-            margin-top: 20px;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
+            border: none; color: white; padding: 8px 16px;
+            border-radius: 15px; font-weight: 700; cursor: pointer;
+            margin: 10px auto; display: block;
         }
-        
-        @media (max-width: 480px) {
-            .reset-btn {
-                padding: 14px 20px;
-                font-size: 0.8rem;
-                width: 100%;
-            }
+        .exercises-table {width: 100%; border-collapse: collapse; margin-top: 20px;}
+        .exercises-table th {background: linear-gradient(45deg, #0066ff, #004499); color: white; padding: 12px;}
+        .exercises-table td {padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); vertical-align: top;}
+        .exercise-name {font-weight: 700; cursor: pointer; text-decoration: underline;}
+        .reps-display {color: #00ff00; font-weight: 700; text-align: center;}
+        .weight-input {width: 70px; padding: 4px; border-radius: 5px; border: none; text-align: center;}
+        .save-btn, .reset-btn {
+            border: none; color: white; padding: 6px 10px;
+            border-radius: 10px; font-weight: 700; cursor: pointer;
+            margin-left: 8px;
         }
-        
-        .reset-btn:hover, .reset-btn:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 102, 0.5);
-            outline: none;
-        }
-        
-        .reset-btn:active {
-            transform: translateY(0);
-        }
-        
-        .workout-complete {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(45deg, #ff6600, #ff0000);
-            border-radius: 15px;
-            margin-top: 20px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @media (max-width: 480px) {
-            .workout-complete {
-                padding: 15px;
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .workout-complete h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        
-        @media (max-width: 480px) {
-            .workout-complete h2 {
-                font-size: 1.2rem;
-            }
-        }
-        
-        .workout-complete p {
-            font-size: 1rem;
-        }
-        
-        @media (max-width: 480px) {
-            .workout-complete p {
-                font-size: 0.9rem;
-            }
-        }
-        
-        .phase-indicator {
-            font-size: 0.9rem;
-            color: #ffff00;
-            margin-left: 15px;
-            font-weight: 700;
-            text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
-        }
-        
-        @media (max-width: 480px) {
-            .phase-indicator {
-                font-size: 0.8rem;
-                margin-left: 0;
-                margin-top: 5px;
-                display: block;
-            }
-        }
-        
-        .timer-display {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffff00;
-            text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
-            text-align: center;
-        }
-        
-        /* Mejoras para touch y accesibilidad */
-        button {
-            min-height: 44px;
-            min-width: 44px;
-        }
-        
-        @media (max-width: 480px) {
-            button {
-                min-height: 48px;
-            }
-        }
-        
-        /* Evitar zoom en inputs en iOS */
-        input, select, textarea {
-            font-size: 16px;
-        }
-        
-        /* Modal para imÃ¡genes */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 90%;
-            max-height: 90%;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { 
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0;
-            }
-            to { 
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-        }
-        
-        .modal-image {
-            width: 100%;
-            height: auto;
-            max-width: 500px;
-            max-height: 400px;
-            object-fit: contain;
-            border-radius: 10px;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        .modal-title {
-            color: #ffffff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-        
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: linear-gradient(45deg, #ff0066, #cc0044);
-            border: none;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 102, 0.3);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-        
-        .close-btn:hover, .close-btn:focus {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 0, 102, 0.5);
-            outline: none;
-        }
-        
-        .exercise-name-clickable {
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: underline;
-            text-decoration-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .exercise-name-clickable:hover {
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-            text-decoration-color: #00ff00;
-        }
-        
-        @media (max-width: 480px) {
-            .modal-content {
-                max-width: 95%;
-                max-height: 95%;
-                padding: 15px;
-            }
-            
-            .modal-image {
-                max-height: 300px;
-            }
-            
-            .modal-title {
-                font-size: 1rem;
-            }
-        }
+        .save-btn {background: linear-gradient(45deg, #00ff00, #00cc00);}
+        .reset-btn {background: linear-gradient(45deg, #ff6600, #cc4400);}
+        .history {font-size: 0.8rem; color: #ccc; margin-top: 5px;}
+        .modal {display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);} 
+        .modal-content {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90%; max-height: 90%; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;}
+        .modal-image {max-width: 500px; width: 100%; border-radius: 10px;}
+        .modal-title {text-align: center; margin-bottom: 15px; font-weight: 700;}
+        .close-btn {position: absolute; top: 10px; right: 15px; border: none; background: red; color: white; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;}
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>SPIDER-MAN HIIT TRACKER</h1>
-            <div class="subtitle">CON GRANDES PODERES VIENEN GRANDES RESPONSABILIDADES</div>
-        </div>
-        
-        <div class="routine-selector">
-            <h3>ðŸ•¸ï¸ Elige tu Rutina de Entrenamiento</h3>
-            <div class="routine-options">
-                <button class="routine-btn active" onclick="selectRoutine('original')">
-                    ðŸ•·ï¸ Rutina Original<br>
-                    <small>(19 rondas dinÃ¡micas)</small>
-                </button>
-                <button class="routine-btn" onclick="selectRoutine('alternative')">
-                    âš¡ Rutina Alternativa<br>
-                    <small>(Circuito + Core)</small>
-                </button>
-            </div>
-        </div>
-        
-        <div class="progress-section">
-            <div class="round-selector" id="roundSelector">
-                <button class="round-btn" onclick="previousRound()">â† Anterior</button>
-                <div class="current-round" id="currentRoundDisplay">
-                    Ronda <span id="currentRound">1</span> / <span id="totalRounds">19</span>
-                    <span class="phase-indicator" id="phaseIndicator">FASE ASCENDENTE</span>
-                </div>
-                <button class="round-btn" onclick="nextRound()">Siguiente â†’</button>
-            </div>
-            
-            <table class="exercises-table">
-                <thead>
-                    <tr>
-                        <th>Ejercicio</th>
-                        <th id="repsHeader">Repeticiones</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody id="exercisesList">
-                    <!-- Se llena dinÃ¡micamente -->
-                </tbody>
-            </table>
-            
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalExercises">0</div>
-                    <div class="stat-label">Ejercicios Completados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalReps">0</div>
-                    <div class="stat-label" id="repsLabel">Repeticiones Totales</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="completionPercentage">0%</div>
-                    <div class="stat-label">Progreso Total</div>
-                </div>
-            </div>
-            
-            <div style="text-align: center;">
-                <button class="reset-btn" onclick="resetWorkout()">ðŸ”„ Reiniciar Entrenamiento</button>
-            </div>
-            
-            <div id="workoutComplete" class="workout-complete" style="display: none;">
-                <h2>ðŸ•·ï¸ Â¡ENTRENAMIENTO COMPLETADO! ðŸ•·ï¸</h2>
-                <p>Â¡Has completado tu rutina HIIT como un verdadero Spider-Man!</p>
-            </div>
-        </div>
-        
-        <!-- Modal para mostrar imÃ¡genes de ejercicios -->
-        <div id="exerciseModal" class="modal">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal()">Ã—</button>
-                <h3 id="modalTitle" class="modal-title"></h3>
-                <img id="modalImage" class="modal-image" src="" alt="">
-            </div>
+<div class="container">
+    <div class="header">
+        <h1>Rutina Hipertrofia 4 Días</h1>
+        <div class="subtitle">Empuje · Tirón · Pierna · Fullbody</div>
+    </div>
+
+    <div class="day-selector">
+        <button class="day-btn" onclick="loadDay(1)">Día 1 - Empuje</button>
+        <button class="day-btn" onclick="loadDay(2)">Día 2 - Tirón</button>
+        <button class="day-btn" onclick="loadDay(3)">Día 3 - Piernas</button>
+        <button class="day-btn" onclick="loadDay(4)">Día 4 - Fullbody</button>
+    </div>
+
+    <button id="resetDayBtn" class="reset-day-btn" style="display:none;">🔄 Reiniciar día</button>
+
+    <table class="exercises-table">
+        <thead>
+            <tr>
+                <th>Ejercicio</th>
+                <th>Series x Reps</th>
+                <th>Peso (kg)</th>
+            </tr>
+        </thead>
+        <tbody id="exercisesList"></tbody>
+    </table>
+
+    <!-- Modal -->
+    <div id="exerciseModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <h3 id="modalTitle" class="modal-title"></h3>
+            <img id="modalImage" class="modal-image" src="" alt="">
         </div>
     </div>
-    
-    <script>
-        // Datos de rutinas
-        const routines = {
-            original: {
-                name: 'Rutina Original',
-                exercises: [
-                    { 
-                        name: 'Paso del oso', 
-                        emoji: 'ðŸ»', 
-                        id: 'bearcrawl',
-                        image: 'https://www.wikihow.com/images_en/thumb/3/34/Do-Bear-Crawls-Step-10.jpg/v4-460px-Do-Bear-Crawls-Step-10.jpg'
-                    },
-                    { 
-                        name: 'Plancha con toque de hombros', 
-                        emoji: 'ðŸ¤²', 
-                        id: 'shouldertaps',
-                        image: 'https://thumbs.dreamstime.com/b/tabl%C3%B3n-hombro-grifos-mujer-ejercicio-en-casa-gu%C3%ADa-hembra-haciendo-toques-de-desde-la-tabla-esquema-concepto-chica-trabajando-su-218680936.jpg'
-                    },
-                    { 
-                        name: 'Thruster con mancuernas', 
-                        emoji: 'ðŸ‹ï¸', 
-                        id: 'thrusters',
-                        image: 'https://www.zonawod.com/wp-content/uploads/dumbbell-thrusters-con-mancuernas.jpeg'
-                    },
-                    { 
-                        name: 'Renegade Row', 
-                        emoji: 'ðŸ’ª', 
-                        id: 'renegaderow',
-                        image: 'https://static.strengthlevel.com/images/exercises/renegade-row/renegade-row-800.jpg'
-                    },
-                    { 
-                        name: 'Flexiones', 
-                        emoji: 'ðŸ”¥', 
-                        id: 'pushups',
-                        image: 'https://media.istockphoto.com/id/882882258/es/vector/el-joven-afroamericana-activos-est%C3%A1-haciendo-la-empuja-hacia-arriba-el-ejercicio.jpg?s=612x612&w=0&k=20&c=oeVJw6tTg2Q54puyY1wBof74k-nDLR92WgKZfy2_ds0='
-                    }
-                ],
-                totalRounds: 19,
-                type: 'dynamic'
-            },
-            alternative: {
-                name: 'Rutina Alternativa',
-                parts: [
-                    {
-                        name: 'Circuito Principal',
-                        rounds: 4,
-                        restTime: '1 min',
-                        exercises: [
-                            { 
-                                name: 'Mountain Climbers', 
-                                emoji: 'ðŸ”ï¸', 
-                                id: 'mountainclimbers',
-                                reps: 40,
-                                note: '20 por pierna',
-                                image: 'https://www.ejerciciosencasa.es/wp-content/uploads/2017/09/mountain-climbers.jpg'
-                            },
-                            { 
-                                name: 'Jump Squats', 
-                                emoji: 'ðŸ¦µ', 
-                                id: 'jumpsquats',
-                                reps: 20,
-                                image: 'https://cdn.shopify.com/s/files/1/0269/5851/3900/files/unnamed_d7c5ad0c-6dcb-4c3c-8ac2-f4c3860f18be_480x480.png?v=1678295040'
-                            },
-                            { 
-                                name: 'Zancadas con salto alternas', 
-                                emoji: 'ðŸ¤¸', 
-                                id: 'jumpinglunges',
-                                reps: 20,
-                                note: '10 por pierna',
-                                image: 'https://www.verywellfit.com/thmb/VyCGNYqaEHOkIgBJG-YBkpZpqMk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4017839-jumping-lunges-annotated-5b6f95b4c9e77c0050d2a3e9.png'
-                            },
-                            { 
-                                name: 'Plank Jacks', 
-                                emoji: 'âš¡', 
-                                id: 'plankjacks',
-                                reps: 30,
-                                image: 'https://www.shape.com/thmb/CGr1IpgRd1VQtfNJ-JZZhR6UhNI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/plank-jacks-promo-2000-f83b3f4b91b24b8fb16f54a96bb6e0b0.jpg'
-                            },
-                            { 
-                                name: 'Russian Twists', 
-                                emoji: 'ðŸŒªï¸', 
-                                id: 'russiantwists',
-                                reps: 40,
-                                image: 'https://www.shape.com/thmb/YAQ2M8yEWh-j3_1NJrNEHI1Q3cU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Russian-Twist-GettyImages-1046904280-d6b84c3b5fab4ed9ae4d8c18b96c9a7d.jpg'
-                            },
-                            { 
-                                name: 'Fondos de TrÃ­ceps', 
-                                emoji: 'ðŸ’º', 
-                                id: 'tricepsdips',
-                                reps: 15,
-                                note: 'banco o suelo',
-                                image: 'https://cdn.muscleandstrength.com/sites/default/files/bench-dip.jpg'
-                            }
-                        ]
-                    },
-                    {
-                        name: 'Circuito Final Core',
-                        rounds: 2,
-                        workTime: '40" on',
-                        restTime: '20" off',
-                        exercises: [
-                            { 
-                                name: 'Hollow Hold', 
-                                emoji: 'ðŸª£', 
-                                id: 'hollowhold',
-                                duration: '40"',
-                                image: 'https://www.shape.com/thmb/2bGjPiZOHhRKpJ0TWhDO3K3lQAY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/hollow-body-hold-2000-e6d5be5b8f8a48cab3cc6e6b70b68c2e.jpg'
-                            },
-                            { 
-                                name: 'V-ups', 
-                                emoji: 'â¬†ï¸', 
-                                id: 'vups',
-                                duration: '40"',
-                                image: 'https://cdn.mos.cms.futurecdn.net/P8hKKgAFaZbgEfEvjYLqfA-1200-80.jpg'
-                            },
-                            { 
-                                name: 'Plancha lateral izquierda', 
-                                emoji: 'â¬…ï¸', 
-                                id: 'sideplankl',
-                                duration: '40"',
-                                image: 'https://www.verywellfit.com/thmb/XQHFEj8VhqnPa1vFjRFD1TepHH8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4035353-side-plank-annotated-5b6ca0ddc9e77c0050b7b0b0.png'
-                            },
-                            { 
-                                name: 'Plancha lateral derecha', 
-                                emoji: 'âž¡ï¸', 
-                                id: 'sideplankr',
-                                duration: '40"',
-                                image: 'https://www.verywellfit.com/thmb/XQHFEj8VhqnPa1vFjRFD1TepHH8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4035353-side-plank-annotated-5b6ca0ddc9e77c0050b7b0b0.png'
-                            },
-                            { 
-                                name: 'Leg Raises', 
-                                emoji: 'ðŸ¦µ', 
-                                id: 'legraises',
-                                duration: '40"',
-                                image: 'https://www.verywellfit.com/thmb/q9vRHDxn6VNZxFpRGSn0O6jEGa8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Leg-raises-annotated-5b6fa0cc46e0fb00253e27b9.png'
-                            }
-                        ]
-                    }
-                ],
-                type: 'circuit'
-            }
-        };
-        
-        // Variables globales
-        let currentRoutine = 'original';
-        let currentRound = 1;
-        let currentPart = 0;
-        let completedExercises = {};
-        
-        function selectRoutine(routineName) {
-            // Cambiar rutina activa visualmente
-            document.querySelectorAll('.routine-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Cambiar rutina actual
-            currentRoutine = routineName;
-            currentRound = 1;
-            currentPart = 0;
-            completedExercises = {};
-            
-            // Actualizar interfaz segÃºn la rutina
-            updateInterface();
-            renderExercises();
-            updateStats();
-            document.getElementById('workoutComplete').style.display = 'none';
-        }
-        
-        function updateInterface() {
-            const routine = routines[currentRoutine];
-            
-            if (currentRoutine === 'original') {
-                document.getElementById('totalRounds').textContent = routine.totalRounds;
-                document.getElementById('repsHeader').textContent = 'Repeticiones';
-                document.getElementById('repsLabel').textContent = 'Repeticiones Totales';
-                updateRoundDisplay();
-            } else {
-                // Para rutina alternativa
-                const totalRounds = routine.parts.reduce((sum, part) => sum + part.rounds, 0);
-                document.getElementById('totalRounds').textContent = totalRounds;
-                document.getElementById('repsHeader').textContent = 'DuraciÃ³n/Reps';
-                document.getElementById('repsLabel').textContent = 'Ejercicios Totales';
-                updateAlternativeRoundDisplay();
-            }
-        }
-        
-        function getCurrentReps() {
-            if (currentRound <= 10) {
-                return currentRound;
-            } else {
-                return 20 - currentRound;
-            }
-        }
-        
-        function getPhase() {
-            return currentRound <= 10 ? 'FASE ASCENDENTE' : 'FASE DESCENDENTE';
-        }
-        
-        function getCurrentPartAndRound() {
-            const routine = routines[currentRoutine];
-            let totalRounds = 0;
-            let partIndex = 0;
-            
-            for (let i = 0; i < routine.parts.length; i++) {
-                if (totalRounds + routine.parts[i].rounds >= currentRound) {
-                    partIndex = i;
-                    break;
-                }
-                totalRounds += routine.parts[i].rounds;
-            }
-            
-            const roundInPart = currentRound - totalRounds;
-            return { partIndex, roundInPart, part: routine.parts[partIndex] };
-        }
-        
-        function updateAlternativeRoundDisplay() {
-            const { partIndex, roundInPart, part } = getCurrentPartAndRound();
-            const phaseInfo = `${part.name} - Serie ${roundInPart}/${part.rounds}`;
-            
-            document.getElementById('phaseIndicator').textContent = phaseInfo;
-        }
-        
-        function renderExercises() {
-            const tbody = document.getElementById('exercisesList');
-            tbody.innerHTML = '';
-            
-            if (currentRoutine === 'original') {
-                renderOriginalExercises();
-            } else {
-                renderAlternativeExercises();
-            }
-        }
-        
-        function renderOriginalExercises() {
-            const tbody = document.getElementById('exercisesList');
-            const currentReps = getCurrentReps();
-            const exercises = routines.original.exercises;
-            
-            exercises.forEach(exercise => {
-                const isCompleted = completedExercises[currentRound] && completedExercises[currentRound][exercise.id];
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>
-                        <span class="exercise-emoji">${exercise.emoji}</span>
-                        <span class="exercise-name exercise-name-clickable" onclick="openModal('${exercise.id}', '${exercise.name}', '${exercise.image}')">${exercise.name}</span>
-                    </td>
-                    <td class="reps-display">${currentReps}</td>
-                    <td>
-                        <button class="check-btn ${isCompleted ? 'completed' : ''}" 
-                                onclick="toggleExercise('${exercise.id}')">
-                            ${isCompleted ? 'âœ“ Completado' : 'â—‹ Pendiente'}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function renderAlternativeExercises() {
-            const tbody = document.getElementById('exercisesList');
-            const { partIndex, roundInPart, part } = getCurrentPartAndRound();
-            
-            part.exercises.forEach(exercise => {
-                const isCompleted = completedExercises[currentRound] && completedExercises[currentRound][exercise.id];
-                
-                let repsDisplay = '';
-                if (exercise.reps) {
-                    repsDisplay = exercise.reps;
-                    if (exercise.note) {
-                        repsDisplay += ` (${exercise.note})`;
-                    }
-                } else if (exercise.duration) {
-                    repsDisplay = exercise.duration;
-                }
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>
-                        <span class="exercise-emoji">${exercise.emoji}</span>
-                        <span class="exercise-name exercise-name-clickable" onclick="openModal('${exercise.id}', '${exercise.name}', '${exercise.image}')">${exercise.name}</span>
-                    </td>
-                    <td class="reps-display">${repsDisplay}</td>
-                    <td>
-                        <button class="check-btn ${isCompleted ? 'completed' : ''}" 
-                                onclick="toggleExercise('${exercise.id}')">
-                            ${isCompleted ? 'âœ“ Completado' : 'â—‹ Pendiente'}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function openModal(exerciseId, exerciseName, imageUrl) {
-            const modal = document.getElementById('exerciseModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalImage = document.getElementById('modalImage');
-            
-            modalTitle.textContent = exerciseName;
-            modalImage.src = imageUrl;
-            modalImage.alt = exerciseName;
-            modal.style.display = 'block';
-            
-            // Prevenir scroll del body cuando el modal estÃ¡ abierto
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            const modal = document.getElementById('exerciseModal');
-            modal.style.display = 'none';
-            
-            // Restaurar scroll del body
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Cerrar modal al hacer clic fuera de la imagen
-        window.onclick = function(event) {
-            const modal = document.getElementById('exerciseModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-        
-        // Cerrar modal con tecla Escape
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeModal();
-            }
+</div>
+
+<script>
+    const workouts = {
+        1: [
+            {name: 'Press banca', reps: '4x6-8', image: 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg'},
+            {name: 'Press inclinado mancuernas', reps: '3x8-10', image: 'https://static.strengthlevel.com/images/exercises/incline-dumbbell-bench-press/incline-dumbbell-bench-press-800.jpg'},
+            {name: 'Fondos en paralelas', reps: '3x8-12', image: 'https://static.strengthlevel.com/images/exercises/dip/dip-800.jpg'},
+            {name: 'Press militar', reps: '4x6-8', image: 'https://static.strengthlevel.com/images/exercises/military-press/military-press-800.jpg'},
+            {name: 'Elevaciones laterales', reps: '4x12-15', image: 'https://static.strengthlevel.com/images/exercises/dumbbell-lateral-raise/dumbbell-lateral-raise-800.jpg'},
+            {name: 'Tríceps en polea', reps: '3x10-12', image: 'https://static.strengthlevel.com/images/exercises/tricep-pushdown/tricep-pushdown-800.jpg'}
+        ],
+        2: [
+            {name: 'Dominadas', reps: '4x6-10', image: 'https://static.strengthlevel.com/images/exercises/pull-up/pull-up-800.jpg'},
+            {name: 'Remo con barra', reps: '4x8-10', image: 'https://static.strengthlevel.com/images/exercises/barbell-row/barbell-row-800.jpg'},
+            {name: 'Jalón al pecho', reps: '3x10-12', image: 'https://static.strengthlevel.com/images/exercises/lat-pulldown/lat-pulldown-800.jpg'},
+            {name: 'Face pulls', reps: '3x12-15', image: 'https://static.strengthlevel.com/images/exercises/face-pull/face-pull-800.jpg'},
+            {name: 'Curl bíceps barra Z', reps: '3x8-10', image: 'https://static.strengthlevel.com/images/exercises/barbell-curl/barbell-curl-800.jpg'},
+            {name: 'Curl inclinado mancuernas', reps: '3x10-12', image: 'https://static.strengthlevel.com/images/exercises/incline-dumbbell-curl/incline-dumbbell-curl-800.jpg'}
+        ],
+        3: [
+            {name: 'Sentadilla', reps: '4x6-8', image: 'https://static.strengthlevel.com/images/exercises/squat/squat-800.jpg'},
+            {name: 'Peso muerto rumano', reps: '4x8-10', image: 'https://static.strengthlevel.com/images/exercises/romanian-deadlift/romanian-deadlift-800.jpg'},
+            {name: 'Zancada búlgara', reps: '3x10-12', image: 'https://static.strengthlevel.com/images/exercises/bulgarian-split-squat/bulgarian-split-squat-800.jpg'},
+            {name: 'Prensa de piernas', reps: '3x8-10', image: 'https://static.strengthlevel.com/images/exercises/leg-press/leg-press-800.jpg'},
+            {name: 'Extensión de cuádriceps', reps: '3x12-15', image: 'https://static.strengthlevel.com/images/exercises/leg-extension/leg-extension-800.jpg'},
+            {name: 'Elevaciones de talón', reps: '5x12-20', image: 'https://static.strengthlevel.com/images/exercises/standing-calf-raise/standing-calf-raise-800.jpg'}
+        ],
+        4: [
+            {name: 'Press banca', reps: '3x6-8', image: 'https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg'},
+            {name: 'Press militar', reps: '3x8-10', image: 'https://static.strengthlevel.com/images/exercises/military-press/military-press-800.jpg'},
+            {name: 'Dominadas supinas', reps: '3x8-10', image: 'https://static.strengthlevel.com/images/exercises/chin-up/chin-up-800.jpg'},
+            {name: 'Remo mancuerna unilateral', reps: '3x10-12', image: 'https://static.strengthlevel.com/images/exercises/one-arm-dumbbell-row/one-arm-dumbbell-row-800.jpg'},
+            {name: 'Peso muerto convencional', reps: '3x6-8', image: 'https://static.strengthlevel.com/images/exercises/deadlift/deadlift-800.jpg'},
+            {name: 'Hip thrust', reps: '3x8-10', image: 'https://static.strengthlevel.com/images/exercises/hip-thrust/hip-thrust-800.jpg'},
+            {name: 'Curl bíceps + Extensión tríceps', reps: '2x12-15 (superserie)', image: 'https://static.strengthlevel.com/images/exercises/ez-bar-preacher-curl/ez-bar-preacher-curl-800.jpg'}
+        ]
+    };
+
+    let currentDay = null;
+
+    function loadDay(day) {
+        currentDay = day;
+        document.getElementById("resetDayBtn").style.display = "block";
+        const tbody = document.getElementById('exercisesList');
+        tbody.innerHTML = '';
+        workouts[day].forEach((exercise, index) => {
+            const key = `${day}_${exercise.name}`;
+            const history = JSON.parse(localStorage.getItem(key)) || [];
+            const lastWeight = history.length > 0 ? history[history.length - 1] : '';
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <span class="exercise-name" onclick="openModal('${exercise.name}', '${exercise.image}')">${exercise.name}</span>
+                    <div class="history">Historial: ${history.slice(-5).join(' · ') || '---'}</div>
+                    <button class="reset-btn" onclick="resetExercise('${key}')">Reiniciar</button>
+                </td>
+                <td class="reps-display">${exercise.reps}</td>
+                <td>
+                    <input type="number" id="weight_${key}" class="weight-input" value="${lastWeight}" placeholder="kg">
+                    <button class="save-btn" onclick="saveWeight('${key}')">Guardar</button>
+                </td>
+            `;
+            tbody.appendChild(row);
         });
-        
-        function toggleExercise(exerciseId) {
-            if (!completedExercises[currentRound]) {
-                completedExercises[currentRound] = {};
-            }
-            
-            completedExercises[currentRound][exerciseId] = !completedExercises[currentRound][exerciseId];
-            renderExercises();
-            updateStats();
-            checkWorkoutComplete();
+    }
+
+    function saveWeight(key) {
+        const input = document.getElementById(`weight_${key}`);
+        const value = input.value;
+        if (!value) return;
+        let history = JSON.parse(localStorage.getItem(key)) || [];
+        history.push(value);
+        localStorage.setItem(key, JSON.stringify(history));
+        const day = key.split('_')[0];
+        loadDay(day);
+    }
+
+    function resetExercise(key) {
+        if (confirm("¿Reiniciar historial de este ejercicio?")) {
+            localStorage.removeItem(key);
+            const day = key.split('_')[0];
+            loadDay(day);
         }
-        
-        function updateStats() {
-            let totalExercises = 0;
-            let totalReps = 0;
-            
-            if (currentRoutine === 'original') {
-                updateOriginalStats();
-            } else {
-                updateAlternativeStats();
-            }
-        }
-        
-        function updateOriginalStats() {
-            let totalExercises = 0;
-            let totalReps = 0;
-            const routine = routines.original;
-            
-            for (let round = 1; round <= routine.totalRounds; round++) {
-                const reps = round <= 10 ? round : 20 - round;
-                if (completedExercises[round]) {
-                    Object.values(completedExercises[round]).forEach(completed => {
-                        if (completed) {
-                            totalExercises++;
-                            totalReps += reps;
-                        }
-                    });
-                }
-            }
-            
-            const totalPossibleExercises = routine.exercises.length * routine.totalRounds;
-            const completionPercentage = Math.round((totalExercises / totalPossibleExercises) * 100);
-            
-            document.getElementById('totalExercises').textContent = totalExercises;
-            document.getElementById('totalReps').textContent = totalReps;
-            document.getElementById('completionPercentage').textContent = completionPercentage + '%';
-        }
-        
-        function updateAlternativeStats() {
-            let totalExercises = 0;
-            let totalSets = 0;
-            const routine = routines.alternative;
-            
-            // Calcular total de rondas
-            const totalRounds = routine.parts.reduce((sum, part) => sum + part.rounds, 0);
-            
-            for (let round = 1; round <= totalRounds; round++) {
-                if (completedExercises[round]) {
-                    Object.values(completedExercises[round]).forEach(completed => {
-                        if (completed) {
-                            totalExercises++;
-                            totalSets++;
-                        }
-                    });
-                }
-            }
-            
-            // Calcular total posible de ejercicios
-            let totalPossibleExercises = 0;
-            routine.parts.forEach(part => {
-                totalPossibleExercises += part.exercises.length * part.rounds;
+    }
+
+    document.getElementById("resetDayBtn").addEventListener("click", () => {
+        if (confirm("¿Reiniciar todo el día?")) {
+            workouts[currentDay].forEach(exercise => {
+                const key = `${currentDay}_${exercise.name}`;
+                localStorage.removeItem(key);
             });
-            
-            const completionPercentage = Math.round((totalExercises / totalPossibleExercises) * 100);
-            
-            document.getElementById('totalExercises').textContent = totalExercises;
-            document.getElementById('totalReps').textContent = totalSets;
-            document.getElementById('completionPercentage').textContent = completionPercentage + '%';
+            loadDay(currentDay);
         }
-        
-        function checkWorkoutComplete() {
-            let allCompleted = true;
-            const routine = routines[currentRoutine];
-            let totalRounds;
-            
-            if (currentRoutine === 'original') {
-                totalRounds = routine.totalRounds;
-                const exercises = routine.exercises;
-                
-                for (let round = 1; round <= totalRounds; round++) {
-                    if (!completedExercises[round]) {
-                        allCompleted = false;
-                        break;
-                    }
-                    
-                    for (let exercise of exercises) {
-                        if (!completedExercises[round][exercise.id]) {
-                            allCompleted = false;
-                            break;
-                        }
-                    }
-                    
-                    if (!allCompleted) break;
-                }
-            } else {
-                // Para rutina alternativa
-                totalRounds = routine.parts.reduce((sum, part) => sum + part.rounds, 0);
-                
-                for (let round = 1; round <= totalRounds; round++) {
-                    const { part } = getCurrentPartAndRoundForRound(round);
-                    
-                    if (!completedExercises[round]) {
-                        allCompleted = false;
-                        break;
-                    }
-                    
-                    for (let exercise of part.exercises) {
-                        if (!completedExercises[round][exercise.id]) {
-                            allCompleted = false;
-                            break;
-                        }
-                    }
-                    
-                    if (!allCompleted) break;
-                }
-            }
-            
-            document.getElementById('workoutComplete').style.display = allCompleted ? 'block' : 'none';
-        }
-        
-        function getCurrentPartAndRoundForRound(roundNum) {
-            const routine = routines[currentRoutine];
-            let totalRounds = 0;
-            let partIndex = 0;
-            
-            for (let i = 0; i < routine.parts.length; i++) {
-                if (totalRounds + routine.parts[i].rounds >= roundNum) {
-                    partIndex = i;
-                    break;
-                }
-                totalRounds += routine.parts[i].rounds;
-            }
-            
-            const roundInPart = roundNum - totalRounds;
-            return { partIndex, roundInPart, part: routine.parts[partIndex] };
-        }
-        
-        function nextRound() {
-            const routine = routines[currentRoutine];
-            let maxRounds = currentRoutine === 'original' ? routine.totalRounds : 
-                          routine.parts.reduce((sum, part) => sum + part.rounds, 0);
-            
-            if (currentRound < maxRounds) {
-                currentRound++;
-                updateRoundDisplay();
-                renderExercises();
-            }
-        }
-        
-        function previousRound() {
-            if (currentRound > 1) {
-                currentRound--;
-                updateRoundDisplay();
-                renderExercises();
-            }
-        }
-        
-        function updateRoundDisplay() {
-            document.getElementById('currentRound').textContent = currentRound;
-            
-            if (currentRoutine === 'original') {
-                document.getElementById('phaseIndicator').textContent = getPhase();
-            } else {
-                updateAlternativeRoundDisplay();
-            }
-        }
-        
-        function resetWorkout() {
-            if (confirm('Â¿EstÃ¡s seguro de que quieres reiniciar todo el entrenamiento?')) {
-                completedExercises = {};
-                currentRound = 1;
-                currentPart = 0;
-                updateRoundDisplay();
-                renderExercises();
-                updateStats();
-                document.getElementById('workoutComplete').style.display = 'none';
-            }
-        }
-        
-        // Inicializar la aplicaciÃ³n
-        updateInterface();
-        renderExercises();
-        updateStats();
-    </script>
+    });
+
+    function openModal(title, imageUrl) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalImage').src = imageUrl;
+        document.getElementById('exerciseModal').style.display = 'block';
+    }
+    function closeModal() {document.getElementById('exerciseModal').style.display = 'none';}
+</script>
 </body>
 </html>
